@@ -11,5 +11,9 @@ void main() {
     expect(data.recipes.length, 27);
     expect((data.products['products'] as List).length, 130);
     expect(data.recipes.every((r) => r['format'] == 'mealprep/1'), isTrue);
+
+    final catalog = data.toCatalog();
+    expect(catalog.recipes.length, 27);
+    expect(catalog.categories.first.name, 'Warzywa i owoce');
   });
 }

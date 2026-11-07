@@ -22,6 +22,7 @@ python3 tools/mealprep_proto.py validate   # czy przepisy są poprawne
 python3 tools/mealprep_proto.py report     # jak każdy przepis trafia w makro
 python3 tools/mealprep_proto.py demo       # przykładowa sesja: porcje, zakupy, plan gotowania
 python3 tools/build_products.py            # po edycji listy produktów
+python3 tools/export_test_fixture.py       # wyniki prototypu dla testów w Darcie (po zmianie danych/logiki)
 ```
 
 ## Status

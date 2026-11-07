@@ -43,7 +43,9 @@ class _HomeScreenState extends State<HomeScreen> {
         future: _data,
         builder: (context, snap) {
           if (snap.hasError) {
-            return Center(child: Text('Błąd wczytywania danych: ${snap.error}'));
+            return Center(
+              child: Text('Błąd wczytywania danych: ${snap.error}'),
+            );
           }
           if (!snap.hasData) {
             return const Center(child: CircularProgressIndicator());

@@ -1,0 +1,3686 @@
+{
+ "settings": {
+  "target": {
+   "kcal": 2500,
+   "p": 150,
+   "f": 75,
+   "c": 305
+  },
+  "training_extra_kcal": 250,
+  "training_extra_from": "c"
+ },
+ "session": {
+  "days": [
+   {
+    "name": "Pon",
+    "training": false,
+    "meals": {
+     "śniadanie": true,
+     "obiad": true,
+     "kolacja": true,
+     "przekąska": true
+    }
+   },
+   {
+    "name": "Wt",
+    "training": true,
+    "meals": {
+     "śniadanie": true,
+     "obiad": true,
+     "kolacja": true,
+     "przekąska": true
+    }
+   },
+   {
+    "name": "Śr",
+    "training": false,
+    "meals": {
+     "śniadanie": false,
+     "obiad": true,
+     "kolacja": true,
+     "przekąska": true
+    }
+   },
+   {
+    "name": "Czw",
+    "training": true,
+    "meals": {
+     "śniadanie": true,
+     "obiad": true,
+     "kolacja": true,
+     "przekąska": true
+    }
+   }
+  ],
+  "prep": {
+   "obiad": "chili-con-carne",
+   "kolacja": "kurczak-curry-ryz"
+  }
+ },
+ "validation": {
+  "burrito-bowl": [],
+  "chili-con-carne": [],
+  "dahl-soczewica": [],
+  "gulasz-indyk-gryczana": [],
+  "indyk-bolognese": [],
+  "jaglanka-truskawki": [],
+  "jajecznica-chleb": [],
+  "kurczak-cukinia-bulgur": [],
+  "kurczak-curry-ryz": [],
+  "kurczak-teriyaki": [],
+  "kurczak-ziemniaki-fasolka": [],
+  "leczo-kurczak-ryz": [],
+  "losos-ryz-brokul": [],
+  "makaron-tunczyk": [],
+  "omlet-szpinak-feta": [],
+  "owsianka-nocna": [],
+  "owsianka-proteinowa": [],
+  "pasta-tunczyk-jajko": [],
+  "pulpety-indyk-bulgur": [],
+  "salatka-kuskus-kurczak": [],
+  "schab-pieczarki-peczak": [],
+  "serek-wiejski-wafle": [],
+  "skyr-owoce-orzechy": [],
+  "smoothie-bananowe": [],
+  "tofu-stir-fry": [],
+  "twarozek-warzywa": [],
+  "wrap-indyk-hummus": []
+ },
+ "bad_validation": {
+  "brak-pol": {
+   "recipe": {
+    "format": "mealprep/1",
+    "id": "x",
+    "name": "X"
+   },
+   "errors": [
+    "brak pola 'meal_types'",
+    "brak pola 'prep'",
+    "brak pola 'time_min'",
+    "brak pola 'ingredients'",
+    "brak pola 'steps'"
+   ]
+  },
+  "zly-format": {
+   "recipe": {
+    "format": "mealprep/2",
+    "id": "x",
+    "name": "X",
+    "meal_types": [
+     "obiad",
+     "deser"
+    ],
+    "prep": true,
+    "time_min": 10,
+    "ingredients": [
+     {
+      "product": "nie-ma-takiego",
+      "g": 10
+     },
+     {
+      "product": "piers-kurczaka",
+      "g": 300,
+      "min": 50,
+      "max": 200
+     }
+    ],
+    "steps": [
+     {
+      "text": "a"
+     },
+     {
+      "text": "b",
+      "min": 3,
+      "after": [
+       2,
+       5
+      ]
+     }
+    ]
+   },
+   "errors": [
+    "format musi być 'mealprep/1'",
+    "nieznane meal_types: {'deser'}",
+    "danie do prepu potrzebuje 'fridge_days'",
+    "nieznany produkt 'nie-ma-takiego'",
+    "piers-kurczaka: g=300 poza zakresem 50-200",
+    "uwaga: brak skalowalnego źródła tłuszczu",
+    "uwaga: brak skalowalnego źródła węglowodanów",
+    "krok 1: wymagane 'text' i 'min'",
+    "krok 2: 'after' może wskazywać tylko wcześniejsze kroki (jest 2)",
+    "krok 2: 'after' może wskazywać tylko wcześniejsze kroki (jest 5)"
+   ]
+  },
+  "bez-skalowania": {
+   "recipe": {
+    "format": "mealprep/1",
+    "id": "x",
+    "name": "X",
+    "meal_types": [
+     "obiad"
+    ],
+    "prep": false,
+    "time_min": 10,
+    "ingredients": [
+     {
+      "product": "ryz-bialy",
+      "g": 70
+     }
+    ],
+    "steps": [
+     {
+      "text": "Gotuj",
+      "min": 5
+     }
+    ]
+   },
+   "errors": [
+    "uwaga: brak składników skalowalnych - porcja będzie stała"
+   ]
+  },
+  "tylko-wegle": {
+   "recipe": {
+    "format": "mealprep/1",
+    "id": "x",
+    "name": "X",
+    "meal_types": [
+     "obiad"
+    ],
+    "prep": false,
+    "time_min": 10,
+    "ingredients": [
+     {
+      "product": "ryz-bialy",
+      "g": 70,
+      "min": 20,
+      "max": 160
+     }
+    ],
+    "steps": [
+     {
+      "text": "Gotuj",
+      "min": 5
+     }
+    ]
+   },
+   "errors": [
+    "uwaga: brak skalowalnego źródła białka",
+    "uwaga: brak skalowalnego źródła tłuszczu"
+   ]
+  }
+ },
+ "scaling": {
+  "burrito-bowl": {
+   "3": [
+    [
+     "filet-z-udka",
+     180
+    ],
+    [
+     "ryz-bialy",
+     100
+    ],
+    [
+     "mieszanka-meksykanska",
+     150
+    ],
+    [
+     "pomidory-krojone",
+     60
+    ],
+    [
+     "jogurt-naturalny",
+     40
+    ],
+    [
+     "olej-rzepakowy",
+     15
+    ],
+    [
+     "kumin",
+     1
+    ],
+    [
+     "papryka-wedzona",
+     2
+    ],
+    [
+     "czosnek-granulowany",
+     1
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "4": [
+    [
+     "filet-z-udka",
+     125
+    ],
+    [
+     "ryz-bialy",
+     65
+    ],
+    [
+     "mieszanka-meksykanska",
+     150
+    ],
+    [
+     "pomidory-krojone",
+     60
+    ],
+    [
+     "jogurt-naturalny",
+     40
+    ],
+    [
+     "olej-rzepakowy",
+     10
+    ],
+    [
+     "kumin",
+     1
+    ],
+    [
+     "papryka-wedzona",
+     2
+    ],
+    [
+     "czosnek-granulowany",
+     1
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "5": [
+    [
+     "filet-z-udka",
+     95
+    ],
+    [
+     "ryz-bialy",
+     50
+    ],
+    [
+     "mieszanka-meksykanska",
+     150
+    ],
+    [
+     "pomidory-krojone",
+     60
+    ],
+    [
+     "jogurt-naturalny",
+     40
+    ],
+    [
+     "olej-rzepakowy",
+     10
+    ],
+    [
+     "kumin",
+     1
+    ],
+    [
+     "papryka-wedzona",
+     2
+    ],
+    [
+     "czosnek-granulowany",
+     1
+    ],
+    [
+     "sol",
+     1
+    ]
+   ]
+  },
+  "chili-con-carne": {
+   "3": [
+    [
+     "mielone-wolowe",
+     155
+    ],
+    [
+     "fasola-czerwona",
+     80
+    ],
+    [
+     "kukurydza",
+     40
+    ],
+    [
+     "pomidory-krojone",
+     150
+    ],
+    [
+     "papryka-czerwona",
+     60
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "ryz-bialy",
+     90
+    ],
+    [
+     "olej-rzepakowy",
+     0
+    ],
+    [
+     "kumin",
+     1
+    ],
+    [
+     "papryka-wedzona",
+     2
+    ],
+    [
+     "chili-platki",
+     0.5
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "4": [
+    [
+     "mielone-wolowe",
+     110
+    ],
+    [
+     "fasola-czerwona",
+     80
+    ],
+    [
+     "kukurydza",
+     40
+    ],
+    [
+     "pomidory-krojone",
+     150
+    ],
+    [
+     "papryka-czerwona",
+     60
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "ryz-bialy",
+     60
+    ],
+    [
+     "olej-rzepakowy",
+     0
+    ],
+    [
+     "kumin",
+     1
+    ],
+    [
+     "papryka-wedzona",
+     2
+    ],
+    [
+     "chili-platki",
+     0.5
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "5": [
+    [
+     "mielone-wolowe",
+     85
+    ],
+    [
+     "fasola-czerwona",
+     80
+    ],
+    [
+     "kukurydza",
+     40
+    ],
+    [
+     "pomidory-krojone",
+     150
+    ],
+    [
+     "papryka-czerwona",
+     60
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "ryz-bialy",
+     40
+    ],
+    [
+     "olej-rzepakowy",
+     0
+    ],
+    [
+     "kumin",
+     1
+    ],
+    [
+     "papryka-wedzona",
+     2
+    ],
+    [
+     "chili-platki",
+     0.5
+    ],
+    [
+     "sol",
+     1
+    ]
+   ]
+  },
+  "dahl-soczewica": {
+   "3": [
+    [
+     "soczewica-czerwona",
+     110
+    ],
+    [
+     "ryz-basmati",
+     40
+    ],
+    [
+     "mleczko-kokosowe-light",
+     60
+    ],
+    [
+     "pomidory-krojone",
+     100
+    ],
+    [
+     "szpinak-mrozony",
+     80
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "imbir",
+     5
+    ],
+    [
+     "curry",
+     3
+    ],
+    [
+     "kurkuma",
+     1
+    ],
+    [
+     "olej-rzepakowy",
+     15
+    ],
+    [
+     "skyr",
+     110
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "4": [
+    [
+     "soczewica-czerwona",
+     80
+    ],
+    [
+     "ryz-basmati",
+     30
+    ],
+    [
+     "mleczko-kokosowe-light",
+     60
+    ],
+    [
+     "pomidory-krojone",
+     100
+    ],
+    [
+     "szpinak-mrozony",
+     80
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "imbir",
+     5
+    ],
+    [
+     "curry",
+     3
+    ],
+    [
+     "kurkuma",
+     1
+    ],
+    [
+     "olej-rzepakowy",
+     10
+    ],
+    [
+     "skyr",
+     90
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "5": [
+    [
+     "soczewica-czerwona",
+     55
+    ],
+    [
+     "ryz-basmati",
+     20
+    ],
+    [
+     "mleczko-kokosowe-light",
+     60
+    ],
+    [
+     "pomidory-krojone",
+     100
+    ],
+    [
+     "szpinak-mrozony",
+     80
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "imbir",
+     5
+    ],
+    [
+     "curry",
+     3
+    ],
+    [
+     "kurkuma",
+     1
+    ],
+    [
+     "olej-rzepakowy",
+     5
+    ],
+    [
+     "skyr",
+     75
+    ],
+    [
+     "sol",
+     1
+    ]
+   ]
+  },
+  "gulasz-indyk-gryczana": {
+   "3": [
+    [
+     "piers-indyka",
+     120
+    ],
+    [
+     "kasza-gryczana",
+     135
+    ],
+    [
+     "pieczarki",
+     80
+    ],
+    [
+     "papryka-czerwona",
+     80
+    ],
+    [
+     "cebula",
+     50
+    ],
+    [
+     "koncentrat-pomidorowy",
+     15
+    ],
+    [
+     "olej-rzepakowy",
+     15
+    ],
+    [
+     "papryka-slodka",
+     2
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "4": [
+    [
+     "piers-indyka",
+     90
+    ],
+    [
+     "kasza-gryczana",
+     95
+    ],
+    [
+     "pieczarki",
+     80
+    ],
+    [
+     "papryka-czerwona",
+     80
+    ],
+    [
+     "cebula",
+     50
+    ],
+    [
+     "koncentrat-pomidorowy",
+     15
+    ],
+    [
+     "olej-rzepakowy",
+     15
+    ],
+    [
+     "papryka-slodka",
+     2
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "5": [
+    [
+     "piers-indyka",
+     80
+    ],
+    [
+     "kasza-gryczana",
+     70
+    ],
+    [
+     "pieczarki",
+     80
+    ],
+    [
+     "papryka-czerwona",
+     80
+    ],
+    [
+     "cebula",
+     50
+    ],
+    [
+     "koncentrat-pomidorowy",
+     15
+    ],
+    [
+     "olej-rzepakowy",
+     10
+    ],
+    [
+     "papryka-slodka",
+     2
+    ],
+    [
+     "sol",
+     1
+    ]
+   ]
+  },
+  "indyk-bolognese": {
+   "3": [
+    [
+     "mielone-indyk",
+     160
+    ],
+    [
+     "makaron-pelnoziarnisty",
+     130
+    ],
+    [
+     "passata",
+     150
+    ],
+    [
+     "marchew",
+     40
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "oliwa",
+     10
+    ],
+    [
+     "oregano",
+     1
+    ],
+    [
+     "bazylia-suszona",
+     1
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "4": [
+    [
+     "mielone-indyk",
+     115
+    ],
+    [
+     "makaron-pelnoziarnisty",
+     90
+    ],
+    [
+     "passata",
+     150
+    ],
+    [
+     "marchew",
+     40
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "oliwa",
+     5
+    ],
+    [
+     "oregano",
+     1
+    ],
+    [
+     "bazylia-suszona",
+     1
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "5": [
+    [
+     "mielone-indyk",
+     90
+    ],
+    [
+     "makaron-pelnoziarnisty",
+     70
+    ],
+    [
+     "passata",
+     150
+    ],
+    [
+     "marchew",
+     40
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "oliwa",
+     5
+    ],
+    [
+     "oregano",
+     1
+    ],
+    [
+     "bazylia-suszona",
+     1
+    ],
+    [
+     "sol",
+     1
+    ]
+   ]
+  },
+  "jaglanka-truskawki": {
+   "3": [
+    [
+     "kasza-jaglana",
+     90
+    ],
+    [
+     "mleko",
+     200
+    ],
+    [
+     "skyr",
+     220
+    ],
+    [
+     "truskawki-mrozone",
+     100
+    ],
+    [
+     "maslo-orzechowe",
+     35
+    ],
+    [
+     "cynamon",
+     1
+    ]
+   ],
+   "4": [
+    [
+     "kasza-jaglana",
+     75
+    ],
+    [
+     "mleko",
+     200
+    ],
+    [
+     "skyr",
+     150
+    ],
+    [
+     "truskawki-mrozone",
+     100
+    ],
+    [
+     "maslo-orzechowe",
+     25
+    ],
+    [
+     "cynamon",
+     1
+    ]
+   ],
+   "5": [
+    [
+     "kasza-jaglana",
+     55
+    ],
+    [
+     "mleko",
+     200
+    ],
+    [
+     "skyr",
+     115
+    ],
+    [
+     "truskawki-mrozone",
+     100
+    ],
+    [
+     "maslo-orzechowe",
+     15
+    ],
+    [
+     "cynamon",
+     1
+    ]
+   ]
+  },
+  "jajecznica-chleb": {
+   "3": [
+    [
+     "jajko",
+     275
+    ],
+    [
+     "chleb-zytni-pelnoziarnisty",
+     175
+    ],
+    [
+     "pomidor",
+     150
+    ],
+    [
+     "szczypiorek",
+     5
+    ],
+    [
+     "maslo",
+     0
+    ]
+   ],
+   "4": [
+    [
+     "jajko",
+     165
+    ],
+    [
+     "chleb-zytni-pelnoziarnisty",
+     175
+    ],
+    [
+     "pomidor",
+     150
+    ],
+    [
+     "szczypiorek",
+     5
+    ],
+    [
+     "maslo",
+     0
+    ]
+   ],
+   "5": [
+    [
+     "jajko",
+     165
+    ],
+    [
+     "chleb-zytni-pelnoziarnisty",
+     140
+    ],
+    [
+     "pomidor",
+     150
+    ],
+    [
+     "szczypiorek",
+     5
+    ],
+    [
+     "maslo",
+     0
+    ]
+   ]
+  },
+  "kurczak-cukinia-bulgur": {
+   "3": [
+    [
+     "piers-kurczaka",
+     115
+    ],
+    [
+     "kasza-bulgur",
+     135
+    ],
+    [
+     "cukinia",
+     150
+    ],
+    [
+     "pomidorki-koktajlowe",
+     80
+    ],
+    [
+     "cebula-czerwona",
+     30
+    ],
+    [
+     "ser-feta",
+     30
+    ],
+    [
+     "oliwa",
+     15
+    ],
+    [
+     "oregano",
+     1
+    ],
+    [
+     "cytryna",
+     15
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "4": [
+    [
+     "piers-kurczaka",
+     80
+    ],
+    [
+     "kasza-bulgur",
+     100
+    ],
+    [
+     "cukinia",
+     150
+    ],
+    [
+     "pomidorki-koktajlowe",
+     80
+    ],
+    [
+     "cebula-czerwona",
+     30
+    ],
+    [
+     "ser-feta",
+     25
+    ],
+    [
+     "oliwa",
+     10
+    ],
+    [
+     "oregano",
+     1
+    ],
+    [
+     "cytryna",
+     15
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "5": [
+    [
+     "piers-kurczaka",
+     80
+    ],
+    [
+     "kasza-bulgur",
+     75
+    ],
+    [
+     "cukinia",
+     150
+    ],
+    [
+     "pomidorki-koktajlowe",
+     80
+    ],
+    [
+     "cebula-czerwona",
+     30
+    ],
+    [
+     "ser-feta",
+     10
+    ],
+    [
+     "oliwa",
+     10
+    ],
+    [
+     "oregano",
+     1
+    ],
+    [
+     "cytryna",
+     15
+    ],
+    [
+     "sol",
+     1
+    ]
+   ]
+  },
+  "kurczak-curry-ryz": {
+   "3": [
+    [
+     "piers-kurczaka",
+     160
+    ],
+    [
+     "ryz-bialy",
+     120
+    ],
+    [
+     "szpinak-mrozony",
+     100
+    ],
+    [
+     "mleczko-kokosowe-light",
+     50
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "olej-rzepakowy",
+     15
+    ],
+    [
+     "curry",
+     3
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "4": [
+    [
+     "piers-kurczaka",
+     115
+    ],
+    [
+     "ryz-bialy",
+     85
+    ],
+    [
+     "szpinak-mrozony",
+     100
+    ],
+    [
+     "mleczko-kokosowe-light",
+     50
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "olej-rzepakowy",
+     10
+    ],
+    [
+     "curry",
+     3
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "5": [
+    [
+     "piers-kurczaka",
+     90
+    ],
+    [
+     "ryz-bialy",
+     70
+    ],
+    [
+     "szpinak-mrozony",
+     100
+    ],
+    [
+     "mleczko-kokosowe-light",
+     50
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "olej-rzepakowy",
+     10
+    ],
+    [
+     "curry",
+     3
+    ],
+    [
+     "sol",
+     1
+    ]
+   ]
+  },
+  "kurczak-teriyaki": {
+   "3": [
+    [
+     "piers-kurczaka",
+     155
+    ],
+    [
+     "ryz-basmati",
+     105
+    ],
+    [
+     "mieszanka-chinska",
+     200
+    ],
+    [
+     "sos-sojowy",
+     15
+    ],
+    [
+     "miod",
+     8
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "imbir",
+     5
+    ],
+    [
+     "olej-rzepakowy",
+     20
+    ],
+    [
+     "sezam",
+     3
+    ]
+   ],
+   "4": [
+    [
+     "piers-kurczaka",
+     115
+    ],
+    [
+     "ryz-basmati",
+     70
+    ],
+    [
+     "mieszanka-chinska",
+     200
+    ],
+    [
+     "sos-sojowy",
+     15
+    ],
+    [
+     "miod",
+     8
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "imbir",
+     5
+    ],
+    [
+     "olej-rzepakowy",
+     15
+    ],
+    [
+     "sezam",
+     3
+    ]
+   ],
+   "5": [
+    [
+     "piers-kurczaka",
+     85
+    ],
+    [
+     "ryz-basmati",
+     50
+    ],
+    [
+     "mieszanka-chinska",
+     200
+    ],
+    [
+     "sos-sojowy",
+     15
+    ],
+    [
+     "miod",
+     8
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "imbir",
+     5
+    ],
+    [
+     "olej-rzepakowy",
+     10
+    ],
+    [
+     "sezam",
+     3
+    ]
+   ]
+  },
+  "kurczak-ziemniaki-fasolka": {
+   "3": [
+    [
+     "piers-kurczaka",
+     165
+    ],
+    [
+     "ziemniaki",
+     500
+    ],
+    [
+     "fasolka-szparagowa",
+     150
+    ],
+    [
+     "oliwa",
+     20
+    ],
+    [
+     "papryka-slodka",
+     2
+    ],
+    [
+     "ziola-prowansalskie",
+     1
+    ],
+    [
+     "koperek",
+     5
+    ],
+    [
+     "sol",
+     2
+    ]
+   ],
+   "4": [
+    [
+     "piers-kurczaka",
+     115
+    ],
+    [
+     "ziemniaki",
+     415
+    ],
+    [
+     "fasolka-szparagowa",
+     150
+    ],
+    [
+     "oliwa",
+     15
+    ],
+    [
+     "papryka-slodka",
+     2
+    ],
+    [
+     "ziola-prowansalskie",
+     1
+    ],
+    [
+     "koperek",
+     5
+    ],
+    [
+     "sol",
+     2
+    ]
+   ],
+   "5": [
+    [
+     "piers-kurczaka",
+     90
+    ],
+    [
+     "ziemniaki",
+     325
+    ],
+    [
+     "fasolka-szparagowa",
+     150
+    ],
+    [
+     "oliwa",
+     10
+    ],
+    [
+     "papryka-slodka",
+     2
+    ],
+    [
+     "ziola-prowansalskie",
+     1
+    ],
+    [
+     "koperek",
+     5
+    ],
+    [
+     "sol",
+     2
+    ]
+   ]
+  },
+  "leczo-kurczak-ryz": {
+   "3": [
+    [
+     "filet-z-udka",
+     190
+    ],
+    [
+     "ryz-bialy",
+     105
+    ],
+    [
+     "cukinia",
+     120
+    ],
+    [
+     "papryka-czerwona",
+     120
+    ],
+    [
+     "cebula",
+     50
+    ],
+    [
+     "pomidory-krojone",
+     150
+    ],
+    [
+     "koncentrat-pomidorowy",
+     10
+    ],
+    [
+     "olej-rzepakowy",
+     15
+    ],
+    [
+     "papryka-slodka",
+     2
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "4": [
+    [
+     "filet-z-udka",
+     135
+    ],
+    [
+     "ryz-bialy",
+     70
+    ],
+    [
+     "cukinia",
+     120
+    ],
+    [
+     "papryka-czerwona",
+     120
+    ],
+    [
+     "cebula",
+     50
+    ],
+    [
+     "pomidory-krojone",
+     150
+    ],
+    [
+     "koncentrat-pomidorowy",
+     10
+    ],
+    [
+     "olej-rzepakowy",
+     10
+    ],
+    [
+     "papryka-slodka",
+     2
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "5": [
+    [
+     "filet-z-udka",
+     105
+    ],
+    [
+     "ryz-bialy",
+     50
+    ],
+    [
+     "cukinia",
+     120
+    ],
+    [
+     "papryka-czerwona",
+     120
+    ],
+    [
+     "cebula",
+     50
+    ],
+    [
+     "pomidory-krojone",
+     150
+    ],
+    [
+     "koncentrat-pomidorowy",
+     10
+    ],
+    [
+     "olej-rzepakowy",
+     10
+    ],
+    [
+     "papryka-slodka",
+     2
+    ],
+    [
+     "sol",
+     1
+    ]
+   ]
+  },
+  "losos-ryz-brokul": {
+   "3": [
+    [
+     "losos",
+     160
+    ],
+    [
+     "ryz-basmati",
+     120
+    ],
+    [
+     "brokul-mrozony",
+     200
+    ],
+    [
+     "sos-sojowy",
+     10
+    ],
+    [
+     "czosnek",
+     3
+    ],
+    [
+     "oliwa",
+     0
+    ],
+    [
+     "sezam",
+     3
+    ]
+   ],
+   "4": [
+    [
+     "losos",
+     115
+    ],
+    [
+     "ryz-basmati",
+     85
+    ],
+    [
+     "brokul-mrozony",
+     200
+    ],
+    [
+     "sos-sojowy",
+     10
+    ],
+    [
+     "czosnek",
+     3
+    ],
+    [
+     "oliwa",
+     0
+    ],
+    [
+     "sezam",
+     3
+    ]
+   ],
+   "5": [
+    [
+     "losos",
+     85
+    ],
+    [
+     "ryz-basmati",
+     70
+    ],
+    [
+     "brokul-mrozony",
+     200
+    ],
+    [
+     "sos-sojowy",
+     10
+    ],
+    [
+     "czosnek",
+     3
+    ],
+    [
+     "oliwa",
+     0
+    ],
+    [
+     "sezam",
+     3
+    ]
+   ]
+  },
+  "makaron-tunczyk": {
+   "3": [
+    [
+     "tunczyk-wlasny",
+     130
+    ],
+    [
+     "makaron-pszenny",
+     120
+    ],
+    [
+     "passata",
+     150
+    ],
+    [
+     "kukurydza",
+     30
+    ],
+    [
+     "cebula",
+     30
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "oliwa",
+     20
+    ],
+    [
+     "oregano",
+     1
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "4": [
+    [
+     "tunczyk-wlasny",
+     95
+    ],
+    [
+     "makaron-pszenny",
+     85
+    ],
+    [
+     "passata",
+     150
+    ],
+    [
+     "kukurydza",
+     30
+    ],
+    [
+     "cebula",
+     30
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "oliwa",
+     15
+    ],
+    [
+     "oregano",
+     1
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "5": [
+    [
+     "tunczyk-wlasny",
+     75
+    ],
+    [
+     "makaron-pszenny",
+     65
+    ],
+    [
+     "passata",
+     150
+    ],
+    [
+     "kukurydza",
+     30
+    ],
+    [
+     "cebula",
+     30
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "oliwa",
+     10
+    ],
+    [
+     "oregano",
+     1
+    ],
+    [
+     "sol",
+     1
+    ]
+   ]
+  },
+  "omlet-szpinak-feta": {
+   "3": [
+    [
+     "jajko",
+     220
+    ],
+    [
+     "szpinak-swiezy",
+     50
+    ],
+    [
+     "ser-feta",
+     20
+    ],
+    [
+     "pomidorki-koktajlowe",
+     80
+    ],
+    [
+     "chleb-zytni-pelnoziarnisty",
+     175
+    ],
+    [
+     "olej-rzepakowy",
+     0
+    ]
+   ],
+   "4": [
+    [
+     "jajko",
+     165
+    ],
+    [
+     "szpinak-swiezy",
+     50
+    ],
+    [
+     "ser-feta",
+     20
+    ],
+    [
+     "pomidorki-koktajlowe",
+     80
+    ],
+    [
+     "chleb-zytni-pelnoziarnisty",
+     175
+    ],
+    [
+     "olej-rzepakowy",
+     0
+    ]
+   ],
+   "5": [
+    [
+     "jajko",
+     110
+    ],
+    [
+     "szpinak-swiezy",
+     50
+    ],
+    [
+     "ser-feta",
+     20
+    ],
+    [
+     "pomidorki-koktajlowe",
+     80
+    ],
+    [
+     "chleb-zytni-pelnoziarnisty",
+     140
+    ],
+    [
+     "olej-rzepakowy",
+     0
+    ]
+   ]
+  },
+  "owsianka-nocna": {
+   "3": [
+    [
+     "platki-owsiane",
+     110
+    ],
+    [
+     "mleko",
+     150
+    ],
+    [
+     "skyr",
+     220
+    ],
+    [
+     "nasiona-chia",
+     30
+    ],
+    [
+     "owoce-lesne",
+     100
+    ],
+    [
+     "miod",
+     5
+    ]
+   ],
+   "4": [
+    [
+     "platki-owsiane",
+     80
+    ],
+    [
+     "mleko",
+     150
+    ],
+    [
+     "skyr",
+     150
+    ],
+    [
+     "nasiona-chia",
+     25
+    ],
+    [
+     "owoce-lesne",
+     100
+    ],
+    [
+     "miod",
+     5
+    ]
+   ],
+   "5": [
+    [
+     "platki-owsiane",
+     55
+    ],
+    [
+     "mleko",
+     150
+    ],
+    [
+     "skyr",
+     120
+    ],
+    [
+     "nasiona-chia",
+     20
+    ],
+    [
+     "owoce-lesne",
+     100
+    ],
+    [
+     "miod",
+     5
+    ]
+   ]
+  },
+  "owsianka-proteinowa": {
+   "3": [
+    [
+     "platki-owsiane",
+     110
+    ],
+    [
+     "mleko",
+     200
+    ],
+    [
+     "skyr",
+     205
+    ],
+    [
+     "owoce-lesne",
+     100
+    ],
+    [
+     "maslo-orzechowe",
+     25
+    ]
+   ],
+   "4": [
+    [
+     "platki-owsiane",
+     80
+    ],
+    [
+     "mleko",
+     200
+    ],
+    [
+     "skyr",
+     135
+    ],
+    [
+     "owoce-lesne",
+     100
+    ],
+    [
+     "maslo-orzechowe",
+     15
+    ]
+   ],
+   "5": [
+    [
+     "platki-owsiane",
+     60
+    ],
+    [
+     "mleko",
+     200
+    ],
+    [
+     "skyr",
+     105
+    ],
+    [
+     "owoce-lesne",
+     100
+    ],
+    [
+     "maslo-orzechowe",
+     10
+    ]
+   ]
+  },
+  "pasta-tunczyk-jajko": {
+   "3": [
+    [
+     "tunczyk-wlasny",
+     120
+    ],
+    [
+     "jajko",
+     55
+    ],
+    [
+     "jogurt-naturalny",
+     30
+    ],
+    [
+     "kukurydza",
+     30
+    ],
+    [
+     "szczypiorek",
+     5
+    ],
+    [
+     "chleb-zytni-pelnoziarnisty",
+     175
+    ],
+    [
+     "olej-rzepakowy",
+     10
+    ]
+   ],
+   "4": [
+    [
+     "tunczyk-wlasny",
+     75
+    ],
+    [
+     "jajko",
+     55
+    ],
+    [
+     "jogurt-naturalny",
+     30
+    ],
+    [
+     "kukurydza",
+     30
+    ],
+    [
+     "szczypiorek",
+     5
+    ],
+    [
+     "chleb-zytni-pelnoziarnisty",
+     175
+    ],
+    [
+     "olej-rzepakowy",
+     5
+    ]
+   ],
+   "5": [
+    [
+     "tunczyk-wlasny",
+     55
+    ],
+    [
+     "jajko",
+     55
+    ],
+    [
+     "jogurt-naturalny",
+     30
+    ],
+    [
+     "kukurydza",
+     30
+    ],
+    [
+     "szczypiorek",
+     5
+    ],
+    [
+     "chleb-zytni-pelnoziarnisty",
+     140
+    ],
+    [
+     "olej-rzepakowy",
+     5
+    ]
+   ]
+  },
+  "pulpety-indyk-bulgur": {
+   "3": [
+    [
+     "mielone-indyk",
+     165
+    ],
+    [
+     "platki-owsiane",
+     10
+    ],
+    [
+     "kasza-bulgur",
+     125
+    ],
+    [
+     "passata",
+     150
+    ],
+    [
+     "cebula",
+     30
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "oliwa",
+     10
+    ],
+    [
+     "bazylia-suszona",
+     1
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "4": [
+    [
+     "mielone-indyk",
+     120
+    ],
+    [
+     "platki-owsiane",
+     10
+    ],
+    [
+     "kasza-bulgur",
+     85
+    ],
+    [
+     "passata",
+     150
+    ],
+    [
+     "cebula",
+     30
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "oliwa",
+     5
+    ],
+    [
+     "bazylia-suszona",
+     1
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "5": [
+    [
+     "mielone-indyk",
+     95
+    ],
+    [
+     "platki-owsiane",
+     10
+    ],
+    [
+     "kasza-bulgur",
+     65
+    ],
+    [
+     "passata",
+     150
+    ],
+    [
+     "cebula",
+     30
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "oliwa",
+     5
+    ],
+    [
+     "bazylia-suszona",
+     1
+    ],
+    [
+     "sol",
+     1
+    ]
+   ]
+  },
+  "salatka-kuskus-kurczak": {
+   "3": [
+    [
+     "piers-kurczaka",
+     125
+    ],
+    [
+     "kuskus",
+     125
+    ],
+    [
+     "ogorek",
+     80
+    ],
+    [
+     "pomidorki-koktajlowe",
+     80
+    ],
+    [
+     "papryka-czerwona",
+     60
+    ],
+    [
+     "ser-feta",
+     25
+    ],
+    [
+     "oliwa",
+     15
+    ],
+    [
+     "cytryna",
+     10
+    ],
+    [
+     "natka-pietruszki",
+     10
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "4": [
+    [
+     "piers-kurczaka",
+     90
+    ],
+    [
+     "kuskus",
+     90
+    ],
+    [
+     "ogorek",
+     80
+    ],
+    [
+     "pomidorki-koktajlowe",
+     80
+    ],
+    [
+     "papryka-czerwona",
+     60
+    ],
+    [
+     "ser-feta",
+     25
+    ],
+    [
+     "oliwa",
+     10
+    ],
+    [
+     "cytryna",
+     10
+    ],
+    [
+     "natka-pietruszki",
+     10
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "5": [
+    [
+     "piers-kurczaka",
+     80
+    ],
+    [
+     "kuskus",
+     65
+    ],
+    [
+     "ogorek",
+     80
+    ],
+    [
+     "pomidorki-koktajlowe",
+     80
+    ],
+    [
+     "papryka-czerwona",
+     60
+    ],
+    [
+     "ser-feta",
+     25
+    ],
+    [
+     "oliwa",
+     5
+    ],
+    [
+     "cytryna",
+     10
+    ],
+    [
+     "natka-pietruszki",
+     10
+    ],
+    [
+     "sol",
+     1
+    ]
+   ]
+  },
+  "schab-pieczarki-peczak": {
+   "3": [
+    [
+     "schab",
+     135
+    ],
+    [
+     "kasza-peczak",
+     130
+    ],
+    [
+     "pieczarki",
+     120
+    ],
+    [
+     "brokul-mrozony",
+     150
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "smietana-12",
+     30
+    ],
+    [
+     "olej-rzepakowy",
+     10
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "4": [
+    [
+     "schab",
+     90
+    ],
+    [
+     "kasza-peczak",
+     95
+    ],
+    [
+     "pieczarki",
+     120
+    ],
+    [
+     "brokul-mrozony",
+     150
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "smietana-12",
+     30
+    ],
+    [
+     "olej-rzepakowy",
+     5
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "5": [
+    [
+     "schab",
+     80
+    ],
+    [
+     "kasza-peczak",
+     70
+    ],
+    [
+     "pieczarki",
+     120
+    ],
+    [
+     "brokul-mrozony",
+     150
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "smietana-12",
+     30
+    ],
+    [
+     "olej-rzepakowy",
+     5
+    ],
+    [
+     "sol",
+     1
+    ]
+   ]
+  },
+  "serek-wiejski-wafle": {
+   "3": [
+    [
+     "serek-wiejski",
+     400
+    ],
+    [
+     "pomidorki-koktajlowe",
+     100
+    ],
+    [
+     "wafle-ryzowe",
+     80
+    ],
+    [
+     "pestki-dyni",
+     10
+    ]
+   ],
+   "4": [
+    [
+     "serek-wiejski",
+     300
+    ],
+    [
+     "pomidorki-koktajlowe",
+     100
+    ],
+    [
+     "wafle-ryzowe",
+     80
+    ],
+    [
+     "pestki-dyni",
+     10
+    ]
+   ],
+   "5": [
+    [
+     "serek-wiejski",
+     200
+    ],
+    [
+     "pomidorki-koktajlowe",
+     100
+    ],
+    [
+     "wafle-ryzowe",
+     64
+    ],
+    [
+     "pestki-dyni",
+     5
+    ]
+   ]
+  },
+  "skyr-owoce-orzechy": {
+   "3": [
+    [
+     "skyr",
+     300
+    ],
+    [
+     "owoce-lesne",
+     100
+    ],
+    [
+     "platki-owsiane",
+     100
+    ],
+    [
+     "orzechy-wloskie",
+     25
+    ],
+    [
+     "miod",
+     5
+    ]
+   ],
+   "4": [
+    [
+     "skyr",
+     150
+    ],
+    [
+     "owoce-lesne",
+     100
+    ],
+    [
+     "platki-owsiane",
+     85
+    ],
+    [
+     "orzechy-wloskie",
+     20
+    ],
+    [
+     "miod",
+     5
+    ]
+   ],
+   "5": [
+    [
+     "skyr",
+     150
+    ],
+    [
+     "owoce-lesne",
+     100
+    ],
+    [
+     "platki-owsiane",
+     65
+    ],
+    [
+     "orzechy-wloskie",
+     15
+    ],
+    [
+     "miod",
+     5
+    ]
+   ]
+  },
+  "smoothie-bananowe": {
+   "3": [
+    [
+     "banan",
+     120
+    ],
+    [
+     "mleko",
+     250
+    ],
+    [
+     "skyr",
+     215
+    ],
+    [
+     "platki-owsiane",
+     80
+    ],
+    [
+     "maslo-orzechowe",
+     25
+    ]
+   ],
+   "4": [
+    [
+     "banan",
+     120
+    ],
+    [
+     "mleko",
+     250
+    ],
+    [
+     "skyr",
+     155
+    ],
+    [
+     "platki-owsiane",
+     50
+    ],
+    [
+     "maslo-orzechowe",
+     20
+    ]
+   ],
+   "5": [
+    [
+     "banan",
+     120
+    ],
+    [
+     "mleko",
+     250
+    ],
+    [
+     "skyr",
+     120
+    ],
+    [
+     "platki-owsiane",
+     30
+    ],
+    [
+     "maslo-orzechowe",
+     15
+    ]
+   ]
+  },
+  "tofu-stir-fry": {
+   "3": [
+    [
+     "tofu",
+     270
+    ],
+    [
+     "makaron-ryzowy",
+     100
+    ],
+    [
+     "mieszanka-chinska",
+     200
+    ],
+    [
+     "maslo-orzechowe",
+     5
+    ],
+    [
+     "sos-sojowy",
+     15
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "imbir",
+     5
+    ],
+    [
+     "olej-rzepakowy",
+     3
+    ],
+    [
+     "chili-platki",
+     0.5
+    ]
+   ],
+   "4": [
+    [
+     "tofu",
+     205
+    ],
+    [
+     "makaron-ryzowy",
+     75
+    ],
+    [
+     "mieszanka-chinska",
+     200
+    ],
+    [
+     "maslo-orzechowe",
+     0
+    ],
+    [
+     "sos-sojowy",
+     15
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "imbir",
+     5
+    ],
+    [
+     "olej-rzepakowy",
+     3
+    ],
+    [
+     "chili-platki",
+     0.5
+    ]
+   ],
+   "5": [
+    [
+     "tofu",
+     160
+    ],
+    [
+     "makaron-ryzowy",
+     55
+    ],
+    [
+     "mieszanka-chinska",
+     200
+    ],
+    [
+     "maslo-orzechowe",
+     0
+    ],
+    [
+     "sos-sojowy",
+     15
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "imbir",
+     5
+    ],
+    [
+     "olej-rzepakowy",
+     3
+    ],
+    [
+     "chili-platki",
+     0.5
+    ]
+   ]
+  },
+  "twarozek-warzywa": {
+   "3": [
+    [
+     "twarog-poltlusty",
+     220
+    ],
+    [
+     "jogurt-naturalny",
+     30
+    ],
+    [
+     "ogorek",
+     80
+    ],
+    [
+     "szczypiorek",
+     10
+    ],
+    [
+     "chleb-zytni-pelnoziarnisty",
+     175
+    ],
+    [
+     "oliwa",
+     10
+    ]
+   ],
+   "4": [
+    [
+     "twarog-poltlusty",
+     150
+    ],
+    [
+     "jogurt-naturalny",
+     30
+    ],
+    [
+     "ogorek",
+     80
+    ],
+    [
+     "szczypiorek",
+     10
+    ],
+    [
+     "chleb-zytni-pelnoziarnisty",
+     140
+    ],
+    [
+     "oliwa",
+     10
+    ]
+   ],
+   "5": [
+    [
+     "twarog-poltlusty",
+     115
+    ],
+    [
+     "jogurt-naturalny",
+     30
+    ],
+    [
+     "ogorek",
+     80
+    ],
+    [
+     "szczypiorek",
+     10
+    ],
+    [
+     "chleb-zytni-pelnoziarnisty",
+     105
+    ],
+    [
+     "oliwa",
+     5
+    ]
+   ]
+  },
+  "wrap-indyk-hummus": {
+   "3": [
+    [
+     "tortilla-pelnoziarnista",
+     186
+    ],
+    [
+     "szynka-z-indyka",
+     140
+    ],
+    [
+     "hummus",
+     45
+    ],
+    [
+     "mix-salat",
+     30
+    ],
+    [
+     "pomidor",
+     80
+    ],
+    [
+     "ogorek",
+     50
+    ]
+   ],
+   "4": [
+    [
+     "tortilla-pelnoziarnista",
+     124
+    ],
+    [
+     "szynka-z-indyka",
+     105
+    ],
+    [
+     "hummus",
+     35
+    ],
+    [
+     "mix-salat",
+     30
+    ],
+    [
+     "pomidor",
+     80
+    ],
+    [
+     "ogorek",
+     50
+    ]
+   ],
+   "5": [
+    [
+     "tortilla-pelnoziarnista",
+     124
+    ],
+    [
+     "szynka-z-indyka",
+     85
+    ],
+    [
+     "hummus",
+     30
+    ],
+    [
+     "mix-salat",
+     30
+    ],
+    [
+     "pomidor",
+     80
+    ],
+    [
+     "ogorek",
+     50
+    ]
+   ]
+  }
+ },
+ "portions": [
+  {
+   "day": "Pon",
+   "slot": "obiad",
+   "recipe": "chili-con-carne",
+   "items": [
+    [
+     "mielone-wolowe",
+     110
+    ],
+    [
+     "fasola-czerwona",
+     80
+    ],
+    [
+     "kukurydza",
+     40
+    ],
+    [
+     "pomidory-krojone",
+     150
+    ],
+    [
+     "papryka-czerwona",
+     60
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "ryz-bialy",
+     60
+    ],
+    [
+     "olej-rzepakowy",
+     0
+    ],
+    [
+     "kumin",
+     1
+    ],
+    [
+     "papryka-wedzona",
+     2
+    ],
+    [
+     "chili-platki",
+     0.5
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "macros": {
+    "kcal": 639.03,
+    "p": 35.50000000000001,
+    "f": 19.03,
+    "c": 75.65
+   },
+   "target": {
+    "kcal": 625.0,
+    "p": 37.5,
+    "f": 18.75,
+    "c": 76.25
+   }
+  },
+  {
+   "day": "Pon",
+   "slot": "kolacja",
+   "recipe": "kurczak-curry-ryz",
+   "items": [
+    [
+     "piers-kurczaka",
+     115
+    ],
+    [
+     "ryz-bialy",
+     85
+    ],
+    [
+     "szpinak-mrozony",
+     100
+    ],
+    [
+     "mleczko-kokosowe-light",
+     50
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "olej-rzepakowy",
+     10
+    ],
+    [
+     "curry",
+     3
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "macros": {
+    "kcal": 611.1,
+    "p": 36.879999999999995,
+    "f": 17.455000000000002,
+    "c": 73.19
+   },
+   "target": {
+    "kcal": 625.0,
+    "p": 37.5,
+    "f": 18.75,
+    "c": 76.25
+   }
+  },
+  {
+   "day": "Wt",
+   "slot": "obiad",
+   "recipe": "chili-con-carne",
+   "items": [
+    [
+     "mielone-wolowe",
+     110
+    ],
+    [
+     "fasola-czerwona",
+     80
+    ],
+    [
+     "kukurydza",
+     40
+    ],
+    [
+     "pomidory-krojone",
+     150
+    ],
+    [
+     "papryka-czerwona",
+     60
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "ryz-bialy",
+     80
+    ],
+    [
+     "olej-rzepakowy",
+     0
+    ],
+    [
+     "kumin",
+     1
+    ],
+    [
+     "papryka-wedzona",
+     2
+    ],
+    [
+     "chili-platki",
+     0.5
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "macros": {
+    "kcal": 709.03,
+    "p": 36.900000000000006,
+    "f": 19.169999999999998,
+    "c": 91.25
+   },
+   "target": {
+    "kcal": 687.5,
+    "p": 37.5,
+    "f": 18.75,
+    "c": 91.875
+   }
+  },
+  {
+   "day": "Wt",
+   "slot": "kolacja",
+   "recipe": "kurczak-curry-ryz",
+   "items": [
+    [
+     "piers-kurczaka",
+     110
+    ],
+    [
+     "ryz-bialy",
+     105
+    ],
+    [
+     "szpinak-mrozony",
+     100
+    ],
+    [
+     "mleczko-kokosowe-light",
+     50
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "olej-rzepakowy",
+     10
+    ],
+    [
+     "curry",
+     3
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "macros": {
+    "kcal": 675.6,
+    "p": 37.129999999999995,
+    "f": 17.520000000000003,
+    "c": 88.79
+   },
+   "target": {
+    "kcal": 687.5,
+    "p": 37.5,
+    "f": 18.75,
+    "c": 91.875
+   }
+  },
+  {
+   "day": "Śr",
+   "slot": "obiad",
+   "recipe": "chili-con-carne",
+   "items": [
+    [
+     "mielone-wolowe",
+     155
+    ],
+    [
+     "fasola-czerwona",
+     80
+    ],
+    [
+     "kukurydza",
+     40
+    ],
+    [
+     "pomidory-krojone",
+     150
+    ],
+    [
+     "papryka-czerwona",
+     60
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "ryz-bialy",
+     90
+    ],
+    [
+     "olej-rzepakowy",
+     0
+    ],
+    [
+     "kumin",
+     1
+    ],
+    [
+     "papryka-wedzona",
+     2
+    ],
+    [
+     "chili-platki",
+     0.5
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "macros": {
+    "kcal": 838.5300000000001,
+    "p": 46.14999999999999,
+    "f": 25.99,
+    "c": 99.05000000000001
+   },
+   "target": {
+    "kcal": 833.3333333333334,
+    "p": 50.0,
+    "f": 25.0,
+    "c": 101.66666666666667
+   }
+  },
+  {
+   "day": "Śr",
+   "slot": "kolacja",
+   "recipe": "kurczak-curry-ryz",
+   "items": [
+    [
+     "piers-kurczaka",
+     160
+    ],
+    [
+     "ryz-bialy",
+     120
+    ],
+    [
+     "szpinak-mrozony",
+     100
+    ],
+    [
+     "mleczko-kokosowe-light",
+     50
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "olej-rzepakowy",
+     15
+    ],
+    [
+     "curry",
+     3
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "macros": {
+    "kcal": 827.3000000000001,
+    "p": 49.67999999999999,
+    "f": 23.375,
+    "c": 100.49
+   },
+   "target": {
+    "kcal": 833.3333333333334,
+    "p": 50.0,
+    "f": 25.0,
+    "c": 101.66666666666667
+   }
+  },
+  {
+   "day": "Czw",
+   "slot": "obiad",
+   "recipe": "chili-con-carne",
+   "items": [
+    [
+     "mielone-wolowe",
+     110
+    ],
+    [
+     "fasola-czerwona",
+     80
+    ],
+    [
+     "kukurydza",
+     40
+    ],
+    [
+     "pomidory-krojone",
+     150
+    ],
+    [
+     "papryka-czerwona",
+     60
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "ryz-bialy",
+     80
+    ],
+    [
+     "olej-rzepakowy",
+     0
+    ],
+    [
+     "kumin",
+     1
+    ],
+    [
+     "papryka-wedzona",
+     2
+    ],
+    [
+     "chili-platki",
+     0.5
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "macros": {
+    "kcal": 709.03,
+    "p": 36.900000000000006,
+    "f": 19.169999999999998,
+    "c": 91.25
+   },
+   "target": {
+    "kcal": 687.5,
+    "p": 37.5,
+    "f": 18.75,
+    "c": 91.875
+   }
+  },
+  {
+   "day": "Czw",
+   "slot": "kolacja",
+   "recipe": "kurczak-curry-ryz",
+   "items": [
+    [
+     "piers-kurczaka",
+     110
+    ],
+    [
+     "ryz-bialy",
+     105
+    ],
+    [
+     "szpinak-mrozony",
+     100
+    ],
+    [
+     "mleczko-kokosowe-light",
+     50
+    ],
+    [
+     "cebula",
+     40
+    ],
+    [
+     "czosnek",
+     5
+    ],
+    [
+     "olej-rzepakowy",
+     10
+    ],
+    [
+     "curry",
+     3
+    ],
+    [
+     "sol",
+     1
+    ]
+   ],
+   "macros": {
+    "kcal": 675.6,
+    "p": 37.129999999999995,
+    "f": 17.520000000000003,
+    "c": 88.79
+   },
+   "target": {
+    "kcal": 687.5,
+    "p": 37.5,
+    "f": 18.75,
+    "c": 91.875
+   }
+  }
+ ],
+ "shopping": {
+  "groups": [
+   {
+    "cat": "warzywa-owoce",
+    "items": [
+     [
+      "Papryka czerwona",
+      240,
+      "1× 500 g"
+     ],
+     [
+      "Cebula",
+      320,
+      "1× 1000 g"
+     ],
+     [
+      "Czosnek",
+      40,
+      "1× 150 g"
+     ]
+    ]
+   },
+   {
+    "cat": "suche",
+    "items": [
+     [
+      "Ryż biały (suchy)",
+      725,
+      "2× 400 g"
+     ]
+    ]
+   },
+   {
+    "cat": "puszki-sosy",
+    "items": [
+     [
+      "Fasola czerwona (puszka, po odsączeniu)",
+      320,
+      "2× 240 g"
+     ],
+     [
+      "Kukurydza (puszka, po odsączeniu)",
+      160,
+      "1× 285 g"
+     ],
+     [
+      "Pomidory krojone (puszka)",
+      600,
+      "2× 400 g"
+     ],
+     [
+      "Mleczko kokosowe light",
+      200,
+      "1× 400 g"
+     ]
+    ]
+   },
+   {
+    "cat": "mieso-ryby",
+    "items": [
+     [
+      "Mięso mielone wołowe",
+      485,
+      "2× 400 g"
+     ],
+     [
+      "Pierś z kurczaka (surowa)",
+      495,
+      "1× 500 g"
+     ]
+    ]
+   },
+   {
+    "cat": "mrozonki",
+    "items": [
+     [
+      "Szpinak mrożony (liście)",
+      400,
+      "1× 450 g"
+     ]
+    ]
+   }
+  ],
+  "check": [
+   [
+    "Olej rzepakowy",
+    45
+   ],
+   [
+    "Kumin mielony",
+    4
+   ],
+   [
+    "Papryka wędzona mielona",
+    8
+   ],
+   [
+    "Chili płatki",
+    2.0
+   ],
+   [
+    "Sól",
+    8
+   ],
+   [
+    "Curry (przyprawa)",
+    12
+   ]
+  ]
+ },
+ "schedule": {
+  "plan": [
+   [
+    "chili-con-carne",
+    2,
+    0,
+    6
+   ],
+   [
+    "chili-con-carne",
+    3,
+    6,
+    14
+   ],
+   [
+    "kurczak-curry-ryz",
+    2,
+    14,
+    21
+   ],
+   [
+    "chili-con-carne",
+    4,
+    21,
+    36
+   ],
+   [
+    "kurczak-curry-ryz",
+    3,
+    22,
+    30
+   ],
+   [
+    "chili-con-carne",
+    1,
+    30,
+    45
+   ],
+   [
+    "kurczak-curry-ryz",
+    1,
+    31,
+    46
+   ],
+   [
+    "kurczak-curry-ryz",
+    4,
+    32,
+    40
+   ],
+   [
+    "chili-con-carne",
+    5,
+    36,
+    40
+   ],
+   [
+    "chili-con-carne",
+    6,
+    45,
+    49
+   ],
+   [
+    "kurczak-curry-ryz",
+    5,
+    49,
+    53
+   ]
+  ],
+  "total": 53,
+  "seq": 94
+ }
+}
