@@ -1,0 +1,57 @@
+{
+  "format": "mealprep/1",
+  "id": "owsianka-proteinowa",
+  "name": "Owsianka na ciepło ze skyrem i owocami",
+  "meal_types": [
+    "sniadanie"
+  ],
+  "prep": false,
+  "time_min": 8,
+  "equipment": [
+    "garnek"
+  ],
+  "tags": [
+    "slodkie",
+    "szybkie"
+  ],
+  "ingredients": [
+    {
+      "product": "platki-owsiane",
+      "g": 60,
+      "min": 30,
+      "max": 110
+    },
+    {
+      "product": "mleko",
+      "g": 200
+    },
+    {
+      "product": "skyr",
+      "g": 150,
+      "min": 0,
+      "max": 300
+    },
+    {
+      "product": "owoce-lesne",
+      "g": 100
+    },
+    {
+      "product": "maslo-orzechowe",
+      "g": 10,
+      "min": 0,
+      "max": 30
+    }
+  ],
+  "steps": [
+    {
+      "text": "Gotuj płatki w mleku, mieszając.",
+      "min": 5,
+      "passive": true,
+      "burner": true
+    },
+    {
+      "text": "Zdejmij z ognia, wmieszaj skyr, dodaj owoce i masło orzechowe.",
+      "min": 2
+    }
+  ]
+}

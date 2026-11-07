@@ -1,0 +1,105 @@
+{
+  "format": "mealprep/1",
+  "id": "kurczak-teriyaki",
+  "name": "Kurczak teriyaki z warzywami i ryżem basmati",
+  "meal_types": [
+    "obiad",
+    "kolacja"
+  ],
+  "prep": true,
+  "fridge_days": 4,
+  "time_min": 25,
+  "equipment": [
+    "garnek",
+    "patelnia"
+  ],
+  "tags": [
+    "wysokobialkowe",
+    "szybkie"
+  ],
+  "ingredients": [
+    {
+      "product": "piers-kurczaka",
+      "g": 150,
+      "min": 80,
+      "max": 260,
+      "note": "w paski"
+    },
+    {
+      "product": "ryz-basmati",
+      "g": 70,
+      "min": 20,
+      "max": 160
+    },
+    {
+      "product": "mieszanka-chinska",
+      "g": 200
+    },
+    {
+      "product": "sos-sojowy",
+      "g": 15
+    },
+    {
+      "product": "miod",
+      "g": 8
+    },
+    {
+      "product": "czosnek",
+      "g": 5
+    },
+    {
+      "product": "imbir",
+      "g": 5
+    },
+    {
+      "product": "olej-rzepakowy",
+      "g": 5,
+      "min": 0,
+      "max": 20
+    },
+    {
+      "product": "sezam",
+      "g": 3
+    }
+  ],
+  "steps": [
+    {
+      "text": "Ugotuj {ryz-basmati} ryżu.",
+      "min": 13,
+      "passive": true,
+      "burner": true,
+      "after": []
+    },
+    {
+      "text": "Pokrój {piers-kurczaka} piersi w paski. Wymieszaj sos sojowy, miód, starty czosnek i imbir.",
+      "min": 6,
+      "after": []
+    },
+    {
+      "text": "Na {olej-rzepakowy} oleju obsmaż kurczaka na dużym ogniu.",
+      "min": 6,
+      "burner": true,
+      "after": [
+        2
+      ]
+    },
+    {
+      "text": "Dodaj mrożone warzywa i smaż, aż odparują.",
+      "min": 7,
+      "burner": true
+    },
+    {
+      "text": "Wlej sos i smaż jeszcze 2 minuty, aż się zredukuje. Posyp sezamem.",
+      "min": 2,
+      "burner": true
+    },
+    {
+      "text": "Rozłóż ryż i kurczaka do pudełek.",
+      "min": 4,
+      "after": [
+        1,
+        5
+      ]
+    }
+  ]
+}

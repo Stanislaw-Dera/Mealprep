@@ -1,0 +1,105 @@
+{
+  "format": "mealprep/1",
+  "id": "gulasz-indyk-gryczana",
+  "name": "Gulasz z indyka z pieczarkami i kaszą gryczaną",
+  "meal_types": [
+    "obiad",
+    "kolacja"
+  ],
+  "prep": true,
+  "fridge_days": 4,
+  "time_min": 35,
+  "equipment": [
+    "garnek",
+    "patelnia"
+  ],
+  "tags": [
+    "wysokobialkowe"
+  ],
+  "ingredients": [
+    {
+      "product": "piers-indyka",
+      "g": 150,
+      "min": 80,
+      "max": 250,
+      "note": "w kostkę"
+    },
+    {
+      "product": "kasza-gryczana",
+      "g": 70,
+      "min": 25,
+      "max": 150
+    },
+    {
+      "product": "pieczarki",
+      "g": 80
+    },
+    {
+      "product": "papryka-czerwona",
+      "g": 80
+    },
+    {
+      "product": "cebula",
+      "g": 50
+    },
+    {
+      "product": "koncentrat-pomidorowy",
+      "g": 15
+    },
+    {
+      "product": "olej-rzepakowy",
+      "g": 5,
+      "min": 0,
+      "max": 20
+    },
+    {
+      "product": "papryka-slodka",
+      "g": 2
+    },
+    {
+      "product": "sol",
+      "g": 1
+    }
+  ],
+  "steps": [
+    {
+      "text": "Ugotuj {kasza-gryczana} kaszy (1:2 z wodą, po zagotowaniu na małym ogniu pod przykryciem).",
+      "min": 15,
+      "passive": true,
+      "burner": true,
+      "after": []
+    },
+    {
+      "text": "Pokrój indyka, cebulę, paprykę i pieczarki.",
+      "min": 8,
+      "after": []
+    },
+    {
+      "text": "Na {olej-rzepakowy} oleju obsmaż indyka z papryką słodką.",
+      "min": 6,
+      "burner": true,
+      "after": [
+        2
+      ]
+    },
+    {
+      "text": "Dodaj cebulę, pieczarki i paprykę, smaż 4 minuty.",
+      "min": 4,
+      "burner": true
+    },
+    {
+      "text": "Dodaj koncentrat i szklankę wody. Duś pod przykryciem.",
+      "min": 12,
+      "passive": true,
+      "burner": true
+    },
+    {
+      "text": "Rozłóż kaszę i gulasz do pudełek.",
+      "min": 4,
+      "after": [
+        1,
+        5
+      ]
+    }
+  ]
+}

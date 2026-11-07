@@ -1,0 +1,123 @@
+{
+  "format": "mealprep/1",
+  "id": "dahl-soczewica",
+  "name": "Dahl z czerwonej soczewicy ze szpinakiem",
+  "meal_types": [
+    "obiad",
+    "kolacja"
+  ],
+  "prep": true,
+  "fridge_days": 4,
+  "time_min": 30,
+  "equipment": [
+    "garnek"
+  ],
+  "tags": [
+    "wege",
+    "tanie"
+  ],
+  "ingredients": [
+    {
+      "product": "soczewica-czerwona",
+      "g": 70,
+      "min": 40,
+      "max": 130
+    },
+    {
+      "product": "ryz-basmati",
+      "g": 50,
+      "min": 0,
+      "max": 130
+    },
+    {
+      "product": "mleczko-kokosowe-light",
+      "g": 60
+    },
+    {
+      "product": "pomidory-krojone",
+      "g": 100
+    },
+    {
+      "product": "szpinak-mrozony",
+      "g": 80
+    },
+    {
+      "product": "cebula",
+      "g": 40
+    },
+    {
+      "product": "czosnek",
+      "g": 5
+    },
+    {
+      "product": "imbir",
+      "g": 5
+    },
+    {
+      "product": "curry",
+      "g": 3
+    },
+    {
+      "product": "kurkuma",
+      "g": 1
+    },
+    {
+      "product": "olej-rzepakowy",
+      "g": 5,
+      "min": 0,
+      "max": 15
+    },
+    {
+      "product": "skyr",
+      "g": 60,
+      "min": 0,
+      "max": 200,
+      "note": "do podania na wierzch"
+    },
+    {
+      "product": "sol",
+      "g": 1
+    }
+  ],
+  "steps": [
+    {
+      "text": "Ugotuj {ryz-basmati} ryżu.",
+      "min": 13,
+      "passive": true,
+      "burner": true,
+      "after": []
+    },
+    {
+      "text": "Posiekaj cebulę, czosnek i imbir. Wypłucz {soczewica-czerwona} soczewicy.",
+      "min": 5,
+      "after": []
+    },
+    {
+      "text": "Na {olej-rzepakowy} oleju podsmaż cebulę, czosnek, imbir, curry i kurkumę.",
+      "min": 4,
+      "burner": true,
+      "after": [
+        2
+      ]
+    },
+    {
+      "text": "Dodaj soczewicę, pomidory, mleczko i 2 szklanki wody. Gotuj, mieszając od czasu do czasu.",
+      "min": 18,
+      "passive": true,
+      "burner": true
+    },
+    {
+      "text": "Wmieszaj szpinak i dopraw solą.",
+      "min": 3,
+      "burner": true
+    },
+    {
+      "text": "Rozłóż ryż i dahl do pudełek. {skyr} skyru dodawaj przy jedzeniu.",
+      "min": 4,
+      "after": [
+        1,
+        5
+      ]
+    }
+  ]
+}

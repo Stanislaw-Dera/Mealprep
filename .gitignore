@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# Kopia plików od Claude'a (te same pliki są w docs/, data/, tools/)
+Claude outputs/
+
+# Python
+__pycache__/
+*.pyc

@@ -1,0 +1,48 @@
+{
+  "format": "mealprep/1",
+  "id": "serek-wiejski-wafle",
+  "name": "Serek wiejski z pomidorkami, pestkami i waflami",
+  "meal_types": [
+    "przekaska",
+    "kolacja"
+  ],
+  "prep": false,
+  "time_min": 3,
+  "equipment": [],
+  "tags": [
+    "bez-gotowania",
+    "szybkie"
+  ],
+  "ingredients": [
+    {
+      "product": "serek-wiejski",
+      "g": 200,
+      "min": 100,
+      "max": 400,
+      "step": 100
+    },
+    {
+      "product": "pomidorki-koktajlowe",
+      "g": 100
+    },
+    {
+      "product": "wafle-ryzowe",
+      "g": 24,
+      "min": 0,
+      "max": 80,
+      "step": 8
+    },
+    {
+      "product": "pestki-dyni",
+      "g": 10,
+      "min": 0,
+      "max": 30
+    }
+  ],
+  "steps": [
+    {
+      "text": "Przełóż serek do miski, dodaj pokrojone pomidorki, pestki, sól i pieprz. Jedz z waflami.",
+      "min": 3
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "format": "mealprep/1",
+  "id": "kurczak-curry-ryz",
+  "name": "Kurczak curry z ryżem i szpinakiem",
+  "meal_types": [
+    "obiad",
+    "kolacja"
+  ],
+  "prep": true,
+  "fridge_days": 4,
+  "time_min": 30,
+  "equipment": [
+    "garnek",
+    "patelnia"
+  ],
+  "tags": [
+    "wysokobialkowe"
+  ],
+  "ingredients": [
+    {
+      "product": "piers-kurczaka",
+      "g": 150,
+      "min": 80,
+      "max": 260,
+      "note": "w kostkę"
+    },
+    {
+      "product": "ryz-bialy",
+      "g": 70,
+      "min": 20,
+      "max": 160
+    },
+    {
+      "product": "szpinak-mrozony",
+      "g": 100
+    },
+    {
+      "product": "mleczko-kokosowe-light",
+      "g": 50
+    },
+    {
+      "product": "cebula",
+      "g": 40
+    },
+    {
+      "product": "czosnek",
+      "g": 5
+    },
+    {
+      "product": "olej-rzepakowy",
+      "g": 5,
+      "min": 0,
+      "max": 20
+    },
+    {
+      "product": "curry",
+      "g": 3
+    },
+    {
+      "product": "sol",
+      "g": 1
+    }
+  ],
+  "steps": [
+    {
+      "text": "Ugotuj {ryz-bialy} ryżu w osolonej wodzie.",
+      "min": 15,
+      "passive": true,
+      "burner": true,
+      "after": []
+    },
+    {
+      "text": "Pokrój {piers-kurczaka} piersi w kostkę, posiekaj cebulę i czosnek.",
+      "min": 7,
+      "after": []
+    },
+    {
+      "text": "Rozgrzej {olej-rzepakowy} oleju, zeszklij cebulę z czosnkiem, dodaj kurczaka i curry. Smaż, aż mięso się zetnie.",
+      "min": 8,
+      "burner": true,
+      "after": [
+        2
+      ]
+    },
+    {
+      "text": "Dodaj szpinak i mleczko kokosowe, duś pod przykryciem.",
+      "min": 8,
+      "passive": true,
+      "burner": true
+    },
+    {
+      "text": "Przełóż ryż i curry do pudełek (osobno albo wymieszane).",
+      "min": 4,
+      "after": [
+        1,
+        4
+      ]
+    }
+  ]
+}

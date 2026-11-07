@@ -1,0 +1,120 @@
+{
+  "format": "mealprep/1",
+  "id": "chili-con-carne",
+  "name": "Chili con carne z ryżem",
+  "meal_types": [
+    "obiad",
+    "kolacja"
+  ],
+  "prep": true,
+  "fridge_days": 4,
+  "time_min": 35,
+  "equipment": [
+    "garnek"
+  ],
+  "tags": [
+    "wysokobialkowe",
+    "tanie"
+  ],
+  "ingredients": [
+    {
+      "product": "mielone-wolowe",
+      "g": 120,
+      "min": 60,
+      "max": 200
+    },
+    {
+      "product": "fasola-czerwona",
+      "g": 80
+    },
+    {
+      "product": "kukurydza",
+      "g": 40
+    },
+    {
+      "product": "pomidory-krojone",
+      "g": 150
+    },
+    {
+      "product": "papryka-czerwona",
+      "g": 60
+    },
+    {
+      "product": "cebula",
+      "g": 40
+    },
+    {
+      "product": "czosnek",
+      "g": 5
+    },
+    {
+      "product": "ryz-bialy",
+      "g": 60,
+      "min": 20,
+      "max": 150
+    },
+    {
+      "product": "olej-rzepakowy",
+      "g": 3,
+      "min": 0,
+      "max": 15
+    },
+    {
+      "product": "kumin",
+      "g": 1
+    },
+    {
+      "product": "papryka-wedzona",
+      "g": 2
+    },
+    {
+      "product": "chili-platki",
+      "g": 0.5
+    },
+    {
+      "product": "sol",
+      "g": 1
+    }
+  ],
+  "steps": [
+    {
+      "text": "Ugotuj {ryz-bialy} ryżu.",
+      "min": 15,
+      "passive": true,
+      "burner": true,
+      "after": []
+    },
+    {
+      "text": "Pokrój cebulę, czosnek i paprykę.",
+      "min": 6,
+      "after": []
+    },
+    {
+      "text": "W dużym garnku na {olej-rzepakowy} oleju podsmaż cebulę i czosnek, dodaj {mielone-wolowe} mięsa i smaż do zrumienienia.",
+      "min": 8,
+      "burner": true,
+      "after": [
+        2
+      ]
+    },
+    {
+      "text": "Dodaj przyprawy, paprykę i pomidory. Gotuj pod przykryciem.",
+      "min": 15,
+      "passive": true,
+      "burner": true
+    },
+    {
+      "text": "Odsącz fasolę i kukurydzę, dodaj do garnka i podgrzej.",
+      "min": 4,
+      "burner": true
+    },
+    {
+      "text": "Rozłóż ryż i chili do pudełek.",
+      "min": 4,
+      "after": [
+        1,
+        5
+      ]
+    }
+  ]
+}

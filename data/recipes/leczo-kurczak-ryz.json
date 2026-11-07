@@ -1,0 +1,103 @@
+{
+  "format": "mealprep/1",
+  "id": "leczo-kurczak-ryz",
+  "name": "Leczo z kurczakiem i ryżem",
+  "meal_types": [
+    "obiad",
+    "kolacja"
+  ],
+  "prep": true,
+  "fridge_days": 4,
+  "time_min": 35,
+  "equipment": [
+    "garnek"
+  ],
+  "tags": [
+    "wysokobialkowe",
+    "tanie"
+  ],
+  "ingredients": [
+    {
+      "product": "filet-z-udka",
+      "g": 130,
+      "min": 80,
+      "max": 230
+    },
+    {
+      "product": "ryz-bialy",
+      "g": 60,
+      "min": 20,
+      "max": 150
+    },
+    {
+      "product": "cukinia",
+      "g": 120
+    },
+    {
+      "product": "papryka-czerwona",
+      "g": 120
+    },
+    {
+      "product": "cebula",
+      "g": 50
+    },
+    {
+      "product": "pomidory-krojone",
+      "g": 150
+    },
+    {
+      "product": "koncentrat-pomidorowy",
+      "g": 10
+    },
+    {
+      "product": "olej-rzepakowy",
+      "g": 5,
+      "min": 0,
+      "max": 15
+    },
+    {
+      "product": "papryka-slodka",
+      "g": 2
+    },
+    {
+      "product": "sol",
+      "g": 1
+    }
+  ],
+  "steps": [
+    {
+      "text": "Ugotuj {ryz-bialy} ryżu.",
+      "min": 15,
+      "passive": true,
+      "burner": true,
+      "after": []
+    },
+    {
+      "text": "Pokrój kurczaka, cebulę, paprykę i cukinię.",
+      "min": 10,
+      "after": []
+    },
+    {
+      "text": "W dużym garnku na {olej-rzepakowy} oleju obsmaż kurczaka z cebulą.",
+      "min": 6,
+      "burner": true,
+      "after": [
+        2
+      ]
+    },
+    {
+      "text": "Dodaj paprykę, cukinię, pomidory, koncentrat i przyprawy. Duś pod przykryciem.",
+      "min": 15,
+      "passive": true,
+      "burner": true
+    },
+    {
+      "text": "Rozłóż ryż i leczo do pudełek.",
+      "min": 4,
+      "after": [
+        1,
+        4
+      ]
+    }
+  ]
+}

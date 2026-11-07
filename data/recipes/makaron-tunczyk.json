@@ -1,0 +1,101 @@
+{
+  "format": "mealprep/1",
+  "id": "makaron-tunczyk",
+  "name": "Makaron z tuńczykiem w sosie pomidorowym",
+  "meal_types": [
+    "obiad",
+    "kolacja"
+  ],
+  "prep": true,
+  "fridge_days": 3,
+  "time_min": 20,
+  "equipment": [
+    "garnek",
+    "patelnia"
+  ],
+  "tags": [
+    "wysokobialkowe",
+    "tanie",
+    "szybkie"
+  ],
+  "ingredients": [
+    {
+      "product": "tunczyk-wlasny",
+      "g": 100,
+      "min": 60,
+      "max": 200
+    },
+    {
+      "product": "makaron-pszenny",
+      "g": 80,
+      "min": 30,
+      "max": 160
+    },
+    {
+      "product": "passata",
+      "g": 150
+    },
+    {
+      "product": "kukurydza",
+      "g": 30
+    },
+    {
+      "product": "cebula",
+      "g": 30
+    },
+    {
+      "product": "czosnek",
+      "g": 5
+    },
+    {
+      "product": "oliwa",
+      "g": 5,
+      "min": 0,
+      "max": 20
+    },
+    {
+      "product": "oregano",
+      "g": 1
+    },
+    {
+      "product": "sol",
+      "g": 1
+    }
+  ],
+  "steps": [
+    {
+      "text": "Ugotuj {makaron-pszenny} makaronu al dente.",
+      "min": 11,
+      "passive": true,
+      "burner": true,
+      "after": []
+    },
+    {
+      "text": "Posiekaj cebulę i czosnek.",
+      "min": 4,
+      "after": []
+    },
+    {
+      "text": "Na {oliwa} oliwy zeszklij cebulę z czosnkiem, dodaj passatę i oregano. Gotuj.",
+      "min": 8,
+      "passive": true,
+      "burner": true,
+      "after": [
+        2
+      ]
+    },
+    {
+      "text": "Dodaj odsączony tuńczyk i kukurydzę, podgrzej.",
+      "min": 2,
+      "burner": true
+    },
+    {
+      "text": "Wymieszaj z makaronem i rozłóż do pudełek.",
+      "min": 4,
+      "after": [
+        1,
+        4
+      ]
+    }
+  ]
+}

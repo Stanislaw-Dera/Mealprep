@@ -1,0 +1,106 @@
+{
+  "format": "mealprep/1",
+  "id": "indyk-bolognese",
+  "name": "Bolognese z indyka z makaronem pełnoziarnistym",
+  "meal_types": [
+    "obiad",
+    "kolacja"
+  ],
+  "prep": true,
+  "fridge_days": 4,
+  "time_min": 30,
+  "equipment": [
+    "garnek",
+    "patelnia"
+  ],
+  "tags": [
+    "wysokobialkowe"
+  ],
+  "ingredients": [
+    {
+      "product": "mielone-indyk",
+      "g": 150,
+      "min": 80,
+      "max": 250
+    },
+    {
+      "product": "makaron-pelnoziarnisty",
+      "g": 80,
+      "min": 30,
+      "max": 160
+    },
+    {
+      "product": "passata",
+      "g": 150
+    },
+    {
+      "product": "marchew",
+      "g": 40,
+      "note": "starta"
+    },
+    {
+      "product": "cebula",
+      "g": 40
+    },
+    {
+      "product": "czosnek",
+      "g": 5
+    },
+    {
+      "product": "oliwa",
+      "g": 5,
+      "min": 0,
+      "max": 15
+    },
+    {
+      "product": "oregano",
+      "g": 1
+    },
+    {
+      "product": "bazylia-suszona",
+      "g": 1
+    },
+    {
+      "product": "sol",
+      "g": 1
+    }
+  ],
+  "steps": [
+    {
+      "text": "Posiekaj cebulę i czosnek, zetrzyj marchew.",
+      "min": 6,
+      "after": []
+    },
+    {
+      "text": "Na {oliwa} oliwy podsmaż cebulę, czosnek i marchew.",
+      "min": 4,
+      "burner": true
+    },
+    {
+      "text": "Dodaj {mielone-indyk} mięsa, rozbijaj łopatką i smaż, aż zmieni kolor.",
+      "min": 7,
+      "burner": true
+    },
+    {
+      "text": "Wlej passatę, dodaj zioła, sól i pieprz. Duś pod przykryciem.",
+      "min": 12,
+      "passive": true,
+      "burner": true
+    },
+    {
+      "text": "Ugotuj {makaron-pelnoziarnisty} makaronu al dente.",
+      "min": 11,
+      "passive": true,
+      "burner": true,
+      "after": []
+    },
+    {
+      "text": "Odcedź makaron i rozłóż do pudełek razem z sosem.",
+      "min": 4,
+      "after": [
+        4,
+        5
+      ]
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "format": "mealprep/1",
+  "id": "salatka-kuskus-kurczak",
+  "name": "Sałatka z kuskusem, kurczakiem i fetą (na zimno)",
+  "meal_types": [
+    "obiad",
+    "kolacja"
+  ],
+  "prep": true,
+  "fridge_days": 3,
+  "time_min": 20,
+  "equipment": [
+    "czajnik",
+    "patelnia"
+  ],
+  "tags": [
+    "wysokobialkowe",
+    "na-zimno"
+  ],
+  "ingredients": [
+    {
+      "product": "piers-kurczaka",
+      "g": 130,
+      "min": 80,
+      "max": 230
+    },
+    {
+      "product": "kuskus",
+      "g": 60,
+      "min": 20,
+      "max": 130
+    },
+    {
+      "product": "ogorek",
+      "g": 80
+    },
+    {
+      "product": "pomidorki-koktajlowe",
+      "g": 80
+    },
+    {
+      "product": "papryka-czerwona",
+      "g": 60
+    },
+    {
+      "product": "ser-feta",
+      "g": 25
+    },
+    {
+      "product": "oliwa",
+      "g": 8,
+      "min": 0,
+      "max": 20
+    },
+    {
+      "product": "cytryna",
+      "g": 10,
+      "note": "sok"
+    },
+    {
+      "product": "natka-pietruszki",
+      "g": 10
+    },
+    {
+      "product": "sol",
+      "g": 1
+    }
+  ],
+  "steps": [
+    {
+      "text": "Zalej {kuskus} kuskusu wrzątkiem (1:1,5), przykryj i odstaw.",
+      "min": 5,
+      "passive": true,
+      "after": []
+    },
+    {
+      "text": "Pokrój kurczaka i usmaż na połowie oliwy.",
+      "min": 9,
+      "burner": true,
+      "after": []
+    },
+    {
+      "text": "Pokrój warzywa i natkę, pokrusz fetę.",
+      "min": 8,
+      "after": []
+    },
+    {
+      "text": "Wymieszaj kuskus z warzywami, resztą oliwy i sokiem z cytryny. Dodaj kurczaka.",
+      "min": 3,
+      "after": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "text": "Rozłóż do pudełek i przechowuj w lodówce.",
+      "min": 3
+    }
+  ]
+}

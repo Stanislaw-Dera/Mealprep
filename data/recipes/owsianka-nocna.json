@@ -1,0 +1,59 @@
+{
+  "format": "mealprep/1",
+  "id": "owsianka-nocna",
+  "name": "Owsianka nocna ze skyrem i borówkami",
+  "meal_types": [
+    "sniadanie"
+  ],
+  "prep": true,
+  "fridge_days": 3,
+  "time_min": 10,
+  "equipment": [],
+  "tags": [
+    "bez-gotowania",
+    "slodkie"
+  ],
+  "ingredients": [
+    {
+      "product": "platki-owsiane",
+      "g": 60,
+      "min": 30,
+      "max": 110
+    },
+    {
+      "product": "mleko",
+      "g": 150
+    },
+    {
+      "product": "skyr",
+      "g": 150,
+      "min": 0,
+      "max": 300
+    },
+    {
+      "product": "nasiona-chia",
+      "g": 10,
+      "min": 0,
+      "max": 30
+    },
+    {
+      "product": "owoce-lesne",
+      "g": 100
+    },
+    {
+      "product": "miod",
+      "g": 5
+    }
+  ],
+  "steps": [
+    {
+      "text": "W każdym słoiku wymieszaj płatki, chia, mleko i skyr.",
+      "min": 6,
+      "after": []
+    },
+    {
+      "text": "Na wierzch połóż owoce i miód. Zakręć i wstaw do lodówki na noc.",
+      "min": 4
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "format": "mealprep/1",
+  "id": "omlet-szpinak-feta",
+  "name": "Omlet ze szpinakiem i fetą",
+  "meal_types": [
+    "sniadanie",
+    "kolacja"
+  ],
+  "prep": false,
+  "time_min": 10,
+  "equipment": [
+    "patelnia"
+  ],
+  "tags": [
+    "szybkie",
+    "wysokobialkowe"
+  ],
+  "ingredients": [
+    {
+      "product": "jajko",
+      "g": 165,
+      "min": 110,
+      "max": 275,
+      "step": 55
+    },
+    {
+      "product": "szpinak-swiezy",
+      "g": 50
+    },
+    {
+      "product": "ser-feta",
+      "g": 20
+    },
+    {
+      "product": "pomidorki-koktajlowe",
+      "g": 80
+    },
+    {
+      "product": "chleb-zytni-pelnoziarnisty",
+      "g": 35,
+      "min": 0,
+      "max": 175,
+      "step": 35
+    },
+    {
+      "product": "olej-rzepakowy",
+      "g": 3,
+      "min": 0,
+      "max": 10
+    }
+  ],
+  "steps": [
+    {
+      "text": "Roztrzep jajka ze szczyptą soli.",
+      "min": 2
+    },
+    {
+      "text": "Na oleju podsmaż szpinak, wlej jajka i pokrusz fetę. Smaż pod przykryciem na małym ogniu.",
+      "min": 5,
+      "burner": true
+    },
+    {
+      "text": "Podaj z pomidorkami i chlebem.",
+      "min": 1
+    }
+  ]
+}

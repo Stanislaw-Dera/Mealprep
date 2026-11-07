@@ -1,0 +1,53 @@
+{
+  "format": "mealprep/1",
+  "id": "smoothie-bananowe",
+  "name": "Smoothie bananowe z masłem orzechowym",
+  "meal_types": [
+    "sniadanie",
+    "przekaska"
+  ],
+  "prep": false,
+  "time_min": 4,
+  "equipment": [
+    "blender"
+  ],
+  "tags": [
+    "bez-gotowania",
+    "slodkie",
+    "szybkie"
+  ],
+  "ingredients": [
+    {
+      "product": "banan",
+      "g": 120
+    },
+    {
+      "product": "mleko",
+      "g": 250
+    },
+    {
+      "product": "skyr",
+      "g": 150,
+      "min": 0,
+      "max": 300
+    },
+    {
+      "product": "platki-owsiane",
+      "g": 30,
+      "min": 0,
+      "max": 80
+    },
+    {
+      "product": "maslo-orzechowe",
+      "g": 10,
+      "min": 0,
+      "max": 30
+    }
+  ],
+  "steps": [
+    {
+      "text": "Wrzuć wszystko do blendera i zmiksuj na gładko.",
+      "min": 2
+    }
+  ]
+}

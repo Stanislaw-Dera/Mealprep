@@ -1,0 +1,95 @@
+{
+  "format": "mealprep/1",
+  "id": "losos-ryz-brokul",
+  "name": "Łosoś w sosie sojowym z ryżem i brokułem",
+  "meal_types": [
+    "obiad",
+    "kolacja"
+  ],
+  "prep": true,
+  "fridge_days": 3,
+  "time_min": 25,
+  "equipment": [
+    "garnek",
+    "patelnia"
+  ],
+  "tags": [
+    "omega-3",
+    "szybkie"
+  ],
+  "ingredients": [
+    {
+      "product": "losos",
+      "g": 120,
+      "min": 70,
+      "max": 200,
+      "note": "w kostkę"
+    },
+    {
+      "product": "ryz-basmati",
+      "g": 70,
+      "min": 20,
+      "max": 160
+    },
+    {
+      "product": "brokul-mrozony",
+      "g": 200
+    },
+    {
+      "product": "sos-sojowy",
+      "g": 10
+    },
+    {
+      "product": "czosnek",
+      "g": 3
+    },
+    {
+      "product": "oliwa",
+      "g": 3,
+      "min": 0,
+      "max": 15
+    },
+    {
+      "product": "sezam",
+      "g": 3
+    }
+  ],
+  "steps": [
+    {
+      "text": "Ugotuj {ryz-basmati} ryżu.",
+      "min": 13,
+      "passive": true,
+      "burner": true,
+      "after": []
+    },
+    {
+      "text": "Ugotuj brokuł na parze albo w małej ilości wody.",
+      "min": 7,
+      "passive": true,
+      "burner": true,
+      "after": []
+    },
+    {
+      "text": "Pokrój {losos} łososia w kostkę.",
+      "min": 4,
+      "after": []
+    },
+    {
+      "text": "Na {oliwa} oliwy smaż łososia z czosnkiem. Pod koniec wlej sos sojowy.",
+      "min": 7,
+      "burner": true,
+      "after": [
+        3
+      ]
+    },
+    {
+      "text": "Rozłóż do pudełek i posyp sezamem.",
+      "min": 4,
+      "after": [
+        1,
+        2,
+        4
+      ]
+    }
+  ]
+}

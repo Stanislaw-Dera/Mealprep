@@ -1,0 +1,106 @@
+{
+  "format": "mealprep/1",
+  "id": "kurczak-cukinia-bulgur",
+  "name": "Kurczak po grecku z cukinią, fetą i bulgurem",
+  "meal_types": [
+    "obiad",
+    "kolacja"
+  ],
+  "prep": true,
+  "fridge_days": 4,
+  "time_min": 25,
+  "equipment": [
+    "garnek",
+    "patelnia"
+  ],
+  "tags": [
+    "wysokobialkowe",
+    "szybkie"
+  ],
+  "ingredients": [
+    {
+      "product": "piers-kurczaka",
+      "g": 150,
+      "min": 80,
+      "max": 260
+    },
+    {
+      "product": "kasza-bulgur",
+      "g": 70,
+      "min": 20,
+      "max": 150
+    },
+    {
+      "product": "cukinia",
+      "g": 150
+    },
+    {
+      "product": "pomidorki-koktajlowe",
+      "g": 80
+    },
+    {
+      "product": "cebula-czerwona",
+      "g": 30
+    },
+    {
+      "product": "ser-feta",
+      "g": 20,
+      "min": 0,
+      "max": 50
+    },
+    {
+      "product": "oliwa",
+      "g": 5,
+      "min": 0,
+      "max": 20
+    },
+    {
+      "product": "oregano",
+      "g": 1
+    },
+    {
+      "product": "cytryna",
+      "g": 15,
+      "note": "sok"
+    },
+    {
+      "product": "sol",
+      "g": 1
+    }
+  ],
+  "steps": [
+    {
+      "text": "Zalej {kasza-bulgur} bulguru podwójną ilością osolonej wody i gotuj pod przykryciem.",
+      "min": 12,
+      "passive": true,
+      "burner": true,
+      "after": []
+    },
+    {
+      "text": "Pokrój kurczaka, cukinię i cebulę, przekrój pomidorki na pół.",
+      "min": 7,
+      "after": []
+    },
+    {
+      "text": "Na {oliwa} oliwy smaż kurczaka z oregano.",
+      "min": 6,
+      "burner": true,
+      "after": [
+        2
+      ]
+    },
+    {
+      "text": "Dodaj cukinię i cebulę, smaż 5 minut. Na koniec dorzuć pomidorki i skrop cytryną.",
+      "min": 6,
+      "burner": true
+    },
+    {
+      "text": "Rozłóż bulgur i kurczaka do pudełek, pokrusz na wierzch {ser-feta} fety.",
+      "min": 4,
+      "after": [
+        1,
+        4
+      ]
+    }
+  ]
+}

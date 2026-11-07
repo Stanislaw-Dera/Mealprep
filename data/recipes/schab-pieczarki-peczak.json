@@ -1,0 +1,110 @@
+{
+  "format": "mealprep/1",
+  "id": "schab-pieczarki-peczak",
+  "name": "Schab w sosie pieczarkowym z pęczakiem i brokułem",
+  "meal_types": [
+    "obiad",
+    "kolacja"
+  ],
+  "prep": true,
+  "fridge_days": 4,
+  "time_min": 35,
+  "equipment": [
+    "garnek",
+    "patelnia"
+  ],
+  "tags": [
+    "wysokobialkowe",
+    "klasyk"
+  ],
+  "ingredients": [
+    {
+      "product": "schab",
+      "g": 130,
+      "min": 80,
+      "max": 220,
+      "note": "w plastry albo kostkę"
+    },
+    {
+      "product": "kasza-peczak",
+      "g": 70,
+      "min": 25,
+      "max": 140
+    },
+    {
+      "product": "pieczarki",
+      "g": 120
+    },
+    {
+      "product": "brokul-mrozony",
+      "g": 150
+    },
+    {
+      "product": "cebula",
+      "g": 40
+    },
+    {
+      "product": "smietana-12",
+      "g": 30
+    },
+    {
+      "product": "olej-rzepakowy",
+      "g": 5,
+      "min": 0,
+      "max": 15
+    },
+    {
+      "product": "sol",
+      "g": 1
+    }
+  ],
+  "steps": [
+    {
+      "text": "Ugotuj {kasza-peczak} pęczaku (1:2,5 z wodą).",
+      "min": 20,
+      "passive": true,
+      "burner": true,
+      "after": []
+    },
+    {
+      "text": "Pokrój schab, pieczarki i cebulę.",
+      "min": 8,
+      "after": []
+    },
+    {
+      "text": "Na {olej-rzepakowy} oleju obsmaż schab.",
+      "min": 6,
+      "burner": true,
+      "after": [
+        2
+      ]
+    },
+    {
+      "text": "Dodaj cebulę i pieczarki, smaż, aż odparują.",
+      "min": 6,
+      "burner": true
+    },
+    {
+      "text": "Podlej pół szklanki wody i duś pod przykryciem. Na koniec zabiel śmietaną.",
+      "min": 10,
+      "passive": true,
+      "burner": true
+    },
+    {
+      "text": "Ugotuj brokuł.",
+      "min": 7,
+      "passive": true,
+      "burner": true,
+      "after": []
+    },
+    {
+      "text": "Rozłóż kaszę, schab z sosem i brokuł do pudełek.",
+      "min": 4,
+      "after": [
+        1,
+        5,
+        6
+      ]
+    }
+  ]
+}

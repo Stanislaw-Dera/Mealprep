@@ -1,0 +1,59 @@
+{
+  "format": "mealprep/1",
+  "id": "twarozek-warzywa",
+  "name": "Twarożek z warzywami i chlebem",
+  "meal_types": [
+    "sniadanie",
+    "kolacja"
+  ],
+  "prep": false,
+  "time_min": 7,
+  "equipment": [],
+  "tags": [
+    "bez-gotowania",
+    "wysokobialkowe"
+  ],
+  "ingredients": [
+    {
+      "product": "twarog-poltlusty",
+      "g": 150,
+      "min": 50,
+      "max": 300
+    },
+    {
+      "product": "jogurt-naturalny",
+      "g": 30
+    },
+    {
+      "product": "ogorek",
+      "g": 80
+    },
+    {
+      "product": "szczypiorek",
+      "g": 10
+    },
+    {
+      "product": "chleb-zytni-pelnoziarnisty",
+      "g": 70,
+      "min": 0,
+      "max": 175,
+      "step": 35
+    },
+    {
+      "product": "oliwa",
+      "g": 3,
+      "min": 0,
+      "max": 10
+    }
+  ],
+  "steps": [
+    {
+      "text": "Rozgnieć twaróg z jogurtem, solą i pieprzem. Dodaj posiekany ogórek, szczypiorek i oliwę.",
+      "min": 5
+    },
+    {
+      "text": "Podaj z chlebem.",
+      "min": 1
+    }
+  ]
+}

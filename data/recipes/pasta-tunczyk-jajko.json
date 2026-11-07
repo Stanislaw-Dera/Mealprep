@@ -1,0 +1,72 @@
+{
+  "format": "mealprep/1",
+  "id": "pasta-tunczyk-jajko",
+  "name": "Pasta z tuńczyka i jajka na chlebie",
+  "meal_types": [
+    "sniadanie",
+    "kolacja"
+  ],
+  "prep": false,
+  "time_min": 12,
+  "equipment": [
+    "garnek"
+  ],
+  "tags": [
+    "wysokobialkowe"
+  ],
+  "ingredients": [
+    {
+      "product": "tunczyk-wlasny",
+      "g": 60,
+      "min": 0,
+      "max": 120
+    },
+    {
+      "product": "jajko",
+      "g": 55,
+      "step": 55
+    },
+    {
+      "product": "jogurt-naturalny",
+      "g": 30
+    },
+    {
+      "product": "kukurydza",
+      "g": 30
+    },
+    {
+      "product": "szczypiorek",
+      "g": 5
+    },
+    {
+      "product": "chleb-zytni-pelnoziarnisty",
+      "g": 70,
+      "min": 35,
+      "max": 175,
+      "step": 35
+    },
+    {
+      "product": "olej-rzepakowy",
+      "g": 0,
+      "min": 0,
+      "max": 10,
+      "note": "albo łyżeczka majonezu"
+    }
+  ],
+  "steps": [
+    {
+      "text": "Ugotuj jajko na twardo.",
+      "min": 9,
+      "passive": true,
+      "burner": true
+    },
+    {
+      "text": "Obierz i posiekaj jajko, wymieszaj z tuńczykiem, jogurtem, kukurydzą i szczypiorkiem.",
+      "min": 3
+    },
+    {
+      "text": "Nałóż na chleb.",
+      "min": 1
+    }
+  ]
+}

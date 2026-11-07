@@ -1,0 +1,102 @@
+{
+  "format": "mealprep/1",
+  "id": "tofu-stir-fry",
+  "name": "Stir-fry z tofu, warzywami i sosem orzechowym",
+  "meal_types": [
+    "obiad",
+    "kolacja"
+  ],
+  "prep": true,
+  "fridge_days": 4,
+  "time_min": 25,
+  "equipment": [
+    "garnek",
+    "patelnia"
+  ],
+  "tags": [
+    "wege"
+  ],
+  "ingredients": [
+    {
+      "product": "tofu",
+      "g": 150,
+      "min": 80,
+      "max": 270
+    },
+    {
+      "product": "makaron-ryzowy",
+      "g": 60,
+      "min": 25,
+      "max": 130
+    },
+    {
+      "product": "mieszanka-chinska",
+      "g": 200
+    },
+    {
+      "product": "maslo-orzechowe",
+      "g": 10,
+      "min": 0,
+      "max": 30
+    },
+    {
+      "product": "sos-sojowy",
+      "g": 15
+    },
+    {
+      "product": "czosnek",
+      "g": 5
+    },
+    {
+      "product": "imbir",
+      "g": 5
+    },
+    {
+      "product": "olej-rzepakowy",
+      "g": 3
+    },
+    {
+      "product": "chili-platki",
+      "g": 0.5
+    }
+  ],
+  "steps": [
+    {
+      "text": "Pokrój {tofu} tofu w kostkę i osusz ręcznikiem.",
+      "min": 5,
+      "after": []
+    },
+    {
+      "text": "Na {olej-rzepakowy} oleju smaż tofu, aż będzie złote ze wszystkich stron.",
+      "min": 10,
+      "burner": true
+    },
+    {
+      "text": "Zalej {makaron-ryzowy} makaronu wrzątkiem według opakowania i odcedź.",
+      "min": 6,
+      "passive": true,
+      "after": []
+    },
+    {
+      "text": "Dodaj do patelni warzywa i smaż, aż odparują.",
+      "min": 7,
+      "burner": true,
+      "after": [
+        2
+      ]
+    },
+    {
+      "text": "Wymieszaj masło orzechowe, sos sojowy, czosnek, imbir, chili i 3 łyżki wody. Wlej na patelnię razem z makaronem i wymieszaj.",
+      "min": 3,
+      "burner": true,
+      "after": [
+        3,
+        4
+      ]
+    },
+    {
+      "text": "Rozłóż do pudełek.",
+      "min": 3
+    }
+  ]
+}

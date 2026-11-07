@@ -1,0 +1,52 @@
+{
+  "format": "mealprep/1",
+  "id": "skyr-owoce-orzechy",
+  "name": "Skyr z owocami, płatkami i orzechami",
+  "meal_types": [
+    "sniadanie",
+    "przekaska"
+  ],
+  "prep": false,
+  "time_min": 3,
+  "equipment": [],
+  "tags": [
+    "bez-gotowania",
+    "slodkie",
+    "szybkie"
+  ],
+  "ingredients": [
+    {
+      "product": "skyr",
+      "g": 300,
+      "min": 150,
+      "max": 450,
+      "step": 150
+    },
+    {
+      "product": "owoce-lesne",
+      "g": 100
+    },
+    {
+      "product": "platki-owsiane",
+      "g": 30,
+      "min": 0,
+      "max": 100
+    },
+    {
+      "product": "orzechy-wloskie",
+      "g": 10,
+      "min": 0,
+      "max": 30
+    },
+    {
+      "product": "miod",
+      "g": 5
+    }
+  ],
+  "steps": [
+    {
+      "text": "Przełóż skyr do miski, dodaj owoce (mrożone mogą się chwilę rozmrozić), płatki, orzechy i miód.",
+      "min": 3
+    }
+  ]
+}

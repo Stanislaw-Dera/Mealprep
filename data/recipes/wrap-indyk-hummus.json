@@ -1,0 +1,60 @@
+{
+  "format": "mealprep/1",
+  "id": "wrap-indyk-hummus",
+  "name": "Wrap z szynką z indyka, hummusem i warzywami",
+  "meal_types": [
+    "obiad",
+    "kolacja",
+    "przekaska"
+  ],
+  "prep": false,
+  "time_min": 7,
+  "equipment": [],
+  "tags": [
+    "bez-gotowania",
+    "szybkie"
+  ],
+  "ingredients": [
+    {
+      "product": "tortilla-pelnoziarnista",
+      "g": 62,
+      "min": 62,
+      "max": 186,
+      "step": 62
+    },
+    {
+      "product": "szynka-z-indyka",
+      "g": 60,
+      "min": 30,
+      "max": 150
+    },
+    {
+      "product": "hummus",
+      "g": 30,
+      "min": 0,
+      "max": 60
+    },
+    {
+      "product": "mix-salat",
+      "g": 30
+    },
+    {
+      "product": "pomidor",
+      "g": 80
+    },
+    {
+      "product": "ogorek",
+      "g": 50
+    }
+  ],
+  "steps": [
+    {
+      "text": "Posmaruj tortillę hummusem, ułóż sałatę, szynkę i pokrojone warzywa.",
+      "min": 4
+    },
+    {
+      "text": "Zawiń ciasno (możesz podgrzać na suchej patelni).",
+      "min": 2
+    }
+  ]
+}

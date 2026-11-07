@@ -1,0 +1,58 @@
+{
+  "format": "mealprep/1",
+  "id": "jajecznica-chleb",
+  "name": "Jajecznica ze szczypiorkiem, chleb i pomidor",
+  "meal_types": [
+    "sniadanie",
+    "kolacja"
+  ],
+  "prep": false,
+  "time_min": 8,
+  "equipment": [
+    "patelnia"
+  ],
+  "tags": [
+    "szybkie"
+  ],
+  "ingredients": [
+    {
+      "product": "jajko",
+      "g": 165,
+      "min": 110,
+      "max": 275,
+      "step": 55
+    },
+    {
+      "product": "chleb-zytni-pelnoziarnisty",
+      "g": 70,
+      "min": 0,
+      "max": 175,
+      "step": 35
+    },
+    {
+      "product": "pomidor",
+      "g": 150
+    },
+    {
+      "product": "szczypiorek",
+      "g": 5
+    },
+    {
+      "product": "maslo",
+      "g": 5,
+      "min": 0,
+      "max": 10
+    }
+  ],
+  "steps": [
+    {
+      "text": "Rozpuść masło na patelni, wbij jajka i smaż na małym ogniu, mieszając.",
+      "min": 4,
+      "burner": true
+    },
+    {
+      "text": "Posyp szczypiorkiem i podaj z chlebem i pokrojonym pomidorem.",
+      "min": 2
+    }
+  ]
+}

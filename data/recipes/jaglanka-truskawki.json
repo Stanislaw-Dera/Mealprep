@@ -1,0 +1,77 @@
+{
+  "format": "mealprep/1",
+  "id": "jaglanka-truskawki",
+  "name": "Jaglanka z truskawkami i masłem orzechowym",
+  "meal_types": [
+    "sniadanie"
+  ],
+  "prep": true,
+  "fridge_days": 3,
+  "time_min": 20,
+  "equipment": [
+    "garnek"
+  ],
+  "tags": [
+    "slodkie"
+  ],
+  "ingredients": [
+    {
+      "product": "kasza-jaglana",
+      "g": 50,
+      "min": 25,
+      "max": 90
+    },
+    {
+      "product": "mleko",
+      "g": 200
+    },
+    {
+      "product": "skyr",
+      "g": 100,
+      "min": 0,
+      "max": 250
+    },
+    {
+      "product": "truskawki-mrozone",
+      "g": 100
+    },
+    {
+      "product": "maslo-orzechowe",
+      "g": 10,
+      "min": 0,
+      "max": 40
+    },
+    {
+      "product": "cynamon",
+      "g": 1
+    }
+  ],
+  "steps": [
+    {
+      "text": "Przepłucz {kasza-jaglana} kaszy wrzątkiem (usuwa gorycz).",
+      "min": 2,
+      "after": []
+    },
+    {
+      "text": "Gotuj kaszę w {mleko} mleka na małym ogniu, mieszając.",
+      "min": 15,
+      "passive": true,
+      "burner": true
+    },
+    {
+      "text": "Podgrzej truskawki w małym garnku, aż puszczą sok.",
+      "min": 6,
+      "passive": true,
+      "burner": true,
+      "after": []
+    },
+    {
+      "text": "Rozłóż kaszę do słoików, na wierzch truskawki. Skyr i masło orzechowe dodawaj przy jedzeniu.",
+      "min": 4,
+      "after": [
+        2,
+        3
+      ]
+    }
+  ]
+}

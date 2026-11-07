@@ -1,0 +1,101 @@
+{
+  "format": "mealprep/1",
+  "id": "pulpety-indyk-bulgur",
+  "name": "Pulpety z indyka w sosie pomidorowym z bulgurem",
+  "meal_types": [
+    "obiad",
+    "kolacja"
+  ],
+  "prep": true,
+  "fridge_days": 4,
+  "time_min": 35,
+  "equipment": [
+    "garnek"
+  ],
+  "tags": [
+    "wysokobialkowe"
+  ],
+  "ingredients": [
+    {
+      "product": "mielone-indyk",
+      "g": 150,
+      "min": 80,
+      "max": 250
+    },
+    {
+      "product": "platki-owsiane",
+      "g": 10,
+      "note": "do masy"
+    },
+    {
+      "product": "kasza-bulgur",
+      "g": 70,
+      "min": 20,
+      "max": 150
+    },
+    {
+      "product": "passata",
+      "g": 150
+    },
+    {
+      "product": "cebula",
+      "g": 30
+    },
+    {
+      "product": "czosnek",
+      "g": 5
+    },
+    {
+      "product": "oliwa",
+      "g": 3,
+      "min": 0,
+      "max": 15
+    },
+    {
+      "product": "bazylia-suszona",
+      "g": 1
+    },
+    {
+      "product": "sol",
+      "g": 1
+    }
+  ],
+  "steps": [
+    {
+      "text": "Wymieszaj {mielone-indyk} mięsa z płatkami, połową posiekanej cebuli, czosnkiem i solą. Uformuj kulki.",
+      "min": 10,
+      "after": []
+    },
+    {
+      "text": "W szerokim garnku na {oliwa} oliwy podsmaż resztę cebuli, wlej passatę z bazylią i zagotuj.",
+      "min": 4,
+      "burner": true,
+      "after": []
+    },
+    {
+      "text": "Włóż pulpety do sosu i gotuj pod przykryciem.",
+      "min": 18,
+      "passive": true,
+      "burner": true,
+      "after": [
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Ugotuj {kasza-bulgur} bulguru.",
+      "min": 12,
+      "passive": true,
+      "burner": true,
+      "after": []
+    },
+    {
+      "text": "Rozłóż bulgur i pulpety z sosem do pudełek.",
+      "min": 4,
+      "after": [
+        3,
+        4
+      ]
+    }
+  ]
+}

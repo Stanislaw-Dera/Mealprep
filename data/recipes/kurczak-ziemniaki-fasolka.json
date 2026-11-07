@@ -1,0 +1,102 @@
+{
+  "format": "mealprep/1",
+  "id": "kurczak-ziemniaki-fasolka",
+  "name": "Kurczak z ziemniakami i fasolką szparagową",
+  "meal_types": [
+    "obiad",
+    "kolacja"
+  ],
+  "prep": true,
+  "fridge_days": 4,
+  "time_min": 30,
+  "equipment": [
+    "garnek",
+    "patelnia"
+  ],
+  "tags": [
+    "wysokobialkowe",
+    "klasyk"
+  ],
+  "ingredients": [
+    {
+      "product": "piers-kurczaka",
+      "g": 150,
+      "min": 80,
+      "max": 260
+    },
+    {
+      "product": "ziemniaki",
+      "g": 250,
+      "min": 100,
+      "max": 500
+    },
+    {
+      "product": "fasolka-szparagowa",
+      "g": 150
+    },
+    {
+      "product": "oliwa",
+      "g": 5,
+      "min": 0,
+      "max": 20
+    },
+    {
+      "product": "papryka-slodka",
+      "g": 2
+    },
+    {
+      "product": "ziola-prowansalskie",
+      "g": 1
+    },
+    {
+      "product": "koperek",
+      "g": 5
+    },
+    {
+      "product": "sol",
+      "g": 2
+    }
+  ],
+  "steps": [
+    {
+      "text": "Obierz {ziemniaki} ziemniaków, pokrój i ugotuj w osolonej wodzie.",
+      "min": 8,
+      "after": []
+    },
+    {
+      "text": "Gotuj ziemniaki do miękkości.",
+      "min": 18,
+      "passive": true,
+      "burner": true
+    },
+    {
+      "text": "Ugotuj fasolkę w osolonej wodzie.",
+      "min": 8,
+      "passive": true,
+      "burner": true,
+      "after": []
+    },
+    {
+      "text": "Pokrój {piers-kurczaka} piersi w plastry i natrzyj przyprawami.",
+      "min": 5,
+      "after": []
+    },
+    {
+      "text": "Smaż kurczaka na {oliwa} oliwy po 4 minuty z każdej strony.",
+      "min": 9,
+      "burner": true,
+      "after": [
+        4
+      ]
+    },
+    {
+      "text": "Rozłóż do pudełek, ziemniaki posyp koperkiem.",
+      "min": 4,
+      "after": [
+        2,
+        3,
+        5
+      ]
+    }
+  ]
+}
