@@ -7,3 +7,26 @@ Claude outputs/
 # Python
 __pycache__/
 *.pyc
+
+# Flutter / Dart
+.dart_tool/
+.flutter-plugins-dependencies
+build/
+coverage/
+*.iml
+.idea/
+.vscode/
+
+# Android
+android/.gradle/
+android/local.properties
+android/app/debug
+android/app/profile
+android/app/release
+
+# iOS / macOS
+**/Pods/
+**/xcuserdata/
+**/Flutter/ephemeral/
+**/Flutter/Generated.xcconfig
+**/Flutter/flutter_export_environment.sh
