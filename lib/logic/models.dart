@@ -274,5 +274,26 @@ class Catalog {
   final Map<String, Recipe> recipes;
 }
 
+/// Posiłek w dniu (ustawienia): nazwa i czy domyślnie jest z prepu.
+/// Kolejność na liście = kolejność w ciągu dnia.
+class MealSlot {
+  const MealSlot({required this.name, required this.prep});
+
+  final String name;
+
+  /// `true` = gotowany w sesji (pudełko), `false` = „na bieżąco".
+  final bool prep;
+
+  @override
+  bool operator ==(Object other) =>
+      other is MealSlot && other.name == name && other.prep == prep;
+
+  @override
+  int get hashCode => Object.hash(name, prep);
+
+  @override
+  String toString() => 'MealSlot($name, prep: $prep)';
+}
+
 /// Gramatura jednego produktu w porcji albo na liście zakupów.
 typedef Amount = ({String productId, double g});
