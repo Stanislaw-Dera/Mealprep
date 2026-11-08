@@ -8,12 +8,15 @@
 /// Przy zmianie struktury podbij [AppDatabase.schemaVersion] i dopisz migrację.
 library;
 
+import 'dart:convert';
+
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 
 import '../logic/defaults.dart';
 import '../logic/models.dart';
 import '../logic/scaling.dart';
+import '../logic/session_plan.dart';
 
 part 'database.g.dart';
 
@@ -43,7 +46,18 @@ class MealSlots extends Table {
   BoolColumn get prep => boolean()();
 }
 
-@DriftDatabase(tables: [Goals, MealSlots])
+/// Sesje gotowania. Szczegóły planu (dni, posiłki, dania) są w kolumnie
+/// [data] jako JSON: nigdy nie szukamy po nich w bazie, a jeden obiekt
+/// łatwo będzie potem zsynchronizować z Supabase.
+@DataClassName('SessionRow')
+class Sessions extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  DateTimeColumn get firstDay => dateTime()();
+  TextColumn get data => text()();
+  DateTimeColumn get updatedAt => dateTime()();
+}
+
+@DriftDatabase(tables: [Goals, MealSlots, Sessions])
 class AppDatabase extends _$AppDatabase {
   /// Bez argumentu: plik `mealprep.sqlite` w folderze danych aplikacji.
   /// W testach podajemy bazę w pamięci (`NativeDatabase.memory()`).
@@ -51,7 +65,7 @@ class AppDatabase extends _$AppDatabase {
     : super(executor ?? driftDatabase(name: 'mealprep'));
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -59,6 +73,10 @@ class AppDatabase extends _$AppDatabase {
       await m.createAll();
       await saveSettings(defaultSettings);
       await saveMealSlots(defaultMealSlots);
+    },
+    // Baza z poprzedniej wersji aplikacji: dokładamy tylko to, czego brakuje.
+    onUpgrade: (m, from, to) async {
+      if (from < 2) await m.createTable(sessions);
     },
   );
 
@@ -108,4 +126,38 @@ class AppDatabase extends _$AppDatabase {
       );
     }
   });
+
+  // ----------------------------------------------------------- sesje
+
+  /// Wszystkie sesje, najnowsze na górze.
+  Future<List<SessionPlan>> loadSessions() async {
+    final rows = await (select(
+      sessions,
+    )..orderBy([(t) => OrderingTerm.desc(t.firstDay)])).get();
+    return [
+      for (final r in rows)
+        SessionPlan.fromJson(
+          jsonDecode(r.data) as Map<String, dynamic>,
+          id: r.id,
+        ),
+    ];
+  }
+
+  /// Zapisuje sesję i zwraca ją z nadanym ID.
+  Future<SessionPlan> saveSession(SessionPlan plan) async {
+    final row = SessionsCompanion(
+      firstDay: Value(plan.firstDay),
+      data: Value(jsonEncode(plan.toJson())),
+      updatedAt: Value(DateTime.now()),
+    );
+    if (plan.id == null) {
+      final id = await into(sessions).insert(row);
+      return plan.copyWith(id: id);
+    }
+    await (update(sessions)..where((t) => t.id.equals(plan.id!))).write(row);
+    return plan;
+  }
+
+  Future<void> deleteSession(int id) =>
+      (delete(sessions)..where((t) => t.id.equals(id))).go();
 }

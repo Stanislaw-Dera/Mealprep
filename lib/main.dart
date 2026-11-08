@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'data/asset_data.dart';
 import 'data/database.dart';
@@ -29,6 +30,10 @@ class MealprepApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Mealprep',
         debugShowCheckedModeBanner: false,
+        // Polskie teksty wbudowanych elementów (kalendarz, „Anuluj", „OK").
+        locale: const Locale('pl'),
+        supportedLocales: const [Locale('pl')],
+        localizationsDelegates: GlobalMaterialLocalizations.delegates,
         // Motyw jasny lub ciemny, zgodnie z ustawieniem systemu.
         themeMode: ThemeMode.system,
         theme: ThemeData(colorSchemeSeed: seed, brightness: Brightness.light),

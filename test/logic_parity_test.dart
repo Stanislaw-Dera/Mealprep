@@ -4,9 +4,6 @@
 // `python3 tools/export_test_fixture.py`. Po zmianie danych albo prototypu
 // wygeneruj plik od nowa i uruchom `flutter test`.
 
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mealprep/logic/models.dart';
 import 'package:mealprep/logic/scaling.dart';
@@ -15,8 +12,7 @@ import 'package:mealprep/logic/session.dart';
 import 'package:mealprep/logic/shopping.dart';
 import 'package:mealprep/logic/validate.dart';
 
-Map<String, dynamic> _readJson(String path) =>
-    jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+import 'test_data.dart';
 
 /// Lista (produkt, gramy) w formacie fixture: [["ryz-bialy", 60], ...]
 List<List<Object>> _items(List<Amount> items) => [
@@ -24,21 +20,11 @@ List<List<Object>> _items(List<Amount> items) => [
 ];
 
 void main() {
-  final expected = _readJson('test/fixtures/proto_expected.json');
+  final expected = readJson('test/fixtures/proto_expected.json');
 
   // Ta sama baza co w aplikacji, wczytana z dysku (pliki posortowane po nazwie).
-  final recipeFiles =
-      Directory('data/recipes')
-          .listSync()
-          .whereType<File>()
-          .where((f) => f.path.endsWith('.json'))
-          .toList()
-        ..sort((a, b) => a.path.compareTo(b.path));
-  final recipesJson = [for (final f in recipeFiles) _readJson(f.path)];
-  final catalog = Catalog.fromJson(
-    _readJson('data/products.json'),
-    recipesJson,
-  );
+  final recipesJson = readRecipesJson();
+  final catalog = loadCatalog();
 
   final settings = Settings.fromJson(
     expected['settings'] as Map<String, dynamic>,

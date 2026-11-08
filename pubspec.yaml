@@ -11,6 +11,8 @@ dependencies:
   drift_flutter: ^0.3.1
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
