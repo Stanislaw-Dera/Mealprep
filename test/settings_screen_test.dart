@@ -8,6 +8,8 @@ import 'package:mealprep/data/database.dart';
 import 'package:mealprep/logic/models.dart';
 import 'package:mealprep/main.dart';
 
+import 'app_test_utils.dart';
+
 void main() {
   late AppDatabase db;
   final catalog = Catalog.fromJson(
@@ -33,7 +35,7 @@ void main() {
 
   Finder field(String label) => find.widgetWithText(TextFormField, label);
 
-  testWidgets('pokazuje domyślne cele i podgląd na posiłek', (tester) async {
+  testAppWidgets('pokazuje domyślne cele i podgląd na posiłek', (tester) async {
     await openSettings(tester);
     expect(find.text('3000'), findsOneWidget);
     expect(find.text('Drugie śniadanie'), findsOneWidget);
@@ -46,7 +48,7 @@ void main() {
     expect(save.onPressed, isNull);
   });
 
-  testWidgets('zmiana kalorii i zapis trafia do bazy', (tester) async {
+  testAppWidgets('zmiana kalorii i zapis trafia do bazy', (tester) async {
     await openSettings(tester);
     await tester.enterText(field('Kalorie'), '3200');
     await tester.pump();
@@ -61,7 +63,7 @@ void main() {
     expect(s!.target.kcal, 3200);
   });
 
-  testWidgets('pusta nazwa posiłku blokuje zapis', (tester) async {
+  testAppWidgets('pusta nazwa posiłku blokuje zapis', (tester) async {
     await openSettings(tester);
     await tester.enterText(field('Posiłek 1'), '');
     await tester.pump(); // przerysuj, żeby „Zapisz" stał się aktywny

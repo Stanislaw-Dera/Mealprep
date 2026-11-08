@@ -73,7 +73,7 @@ void main() {
     expect((await db.loadSessions()).length, 1);
   });
 
-  test('migracja z wersji 1 zachowuje cele i dodaje sesje', () async {
+  test('migracja z wersji 1 zachowuje cele i dodaje nowe tabele', () async {
     final dir = Directory.systemTemp.createTempSync('mealprep_');
     addTearDown(() => dir.deleteSync(recursive: true));
     final file = File('${dir.path}/v1.sqlite');
@@ -114,5 +114,38 @@ void main() {
       ),
     );
     expect(s.id, 1);
+    await old.setChecked(1, 'ryz-bialy', true);
+    expect(await old.watchChecks(1).first, {'ryz-bialy'});
+  });
+
+  test('odhaczanie zakupów i czyszczenie przy usunięciu sesji', () async {
+    final a = await db.saveSession(
+      SessionPlan.create(
+        firstDay: DateTime(2026, 11, 9),
+        dayCount: 3,
+        slots: defaultMealSlots,
+      ),
+    );
+    final b = await db.saveSession(
+      SessionPlan.create(
+        firstDay: DateTime(2026, 11, 12),
+        dayCount: 4,
+        slots: defaultMealSlots,
+      ),
+    );
+    await db.setChecked(a.id!, 'ryz-bialy', true);
+    await db.setChecked(a.id!, 'cebula', true);
+    await db.setChecked(a.id!, 'cebula', true); // drugi raz: bez błędu
+    await db.setChecked(b.id!, 'ryz-bialy', true);
+    expect(await db.watchChecks(a.id!).first, {'ryz-bialy', 'cebula'});
+
+    await db.setChecked(a.id!, 'cebula', false);
+    expect(await db.watchChecks(a.id!).first, {'ryz-bialy'});
+
+    await db.clearChecks(b.id!);
+    expect(await db.watchChecks(b.id!).first, isEmpty);
+
+    await db.deleteSession(a.id!);
+    expect(await db.select(db.shoppingChecks).get(), isEmpty);
   });
 }

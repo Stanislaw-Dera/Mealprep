@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mealprep/data/database.dart';
 import 'package:mealprep/main.dart';
 
+import 'app_test_utils.dart';
 import 'test_data.dart';
 
 void main() {
@@ -13,13 +14,7 @@ void main() {
   setUp(() => db = AppDatabase(NativeDatabase.memory()));
   tearDown(() => db.close());
 
-  /// Daje bazie chwilę „prawdziwego" czasu, potem przerysowuje ekran.
-  Future<void> settle(WidgetTester tester) async {
-    await tester.runAsync(() => Future<void>.delayed(Duration.zero));
-    await tester.pumpAndSettle();
-  }
-
-  testWidgets('nowa sesja, wybór dania i porcje na każdy dzień', (
+  testAppWidgets('nowa sesja, wybór dania i porcje na każdy dzień', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(1400, 2400);

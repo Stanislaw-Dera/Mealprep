@@ -1054,12 +1054,283 @@ class SessionsCompanion extends UpdateCompanion<SessionRow> {
   }
 }
 
+class $ShoppingChecksTable extends ShoppingChecks
+    with TableInfo<$ShoppingChecksTable, ShoppingCheckRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ShoppingChecksTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _sessionIdMeta = const VerificationMeta(
+    'sessionId',
+  );
+  @override
+  late final GeneratedColumn<int> sessionId = GeneratedColumn<int>(
+    'session_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _productIdMeta = const VerificationMeta(
+    'productId',
+  );
+  @override
+  late final GeneratedColumn<String> productId = GeneratedColumn<String>(
+    'product_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _checkedAtMeta = const VerificationMeta(
+    'checkedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> checkedAt = GeneratedColumn<DateTime>(
+    'checked_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [sessionId, productId, checkedAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'shopping_checks';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ShoppingCheckRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('session_id')) {
+      context.handle(
+        _sessionIdMeta,
+        sessionId.isAcceptableOrUnknown(data['session_id']!, _sessionIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sessionIdMeta);
+    }
+    if (data.containsKey('product_id')) {
+      context.handle(
+        _productIdMeta,
+        productId.isAcceptableOrUnknown(data['product_id']!, _productIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_productIdMeta);
+    }
+    if (data.containsKey('checked_at')) {
+      context.handle(
+        _checkedAtMeta,
+        checkedAt.isAcceptableOrUnknown(data['checked_at']!, _checkedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_checkedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {sessionId, productId};
+  @override
+  ShoppingCheckRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ShoppingCheckRow(
+      sessionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}session_id'],
+      )!,
+      productId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}product_id'],
+      )!,
+      checkedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}checked_at'],
+      )!,
+    );
+  }
+
+  @override
+  $ShoppingChecksTable createAlias(String alias) {
+    return $ShoppingChecksTable(attachedDatabase, alias);
+  }
+}
+
+class ShoppingCheckRow extends DataClass
+    implements Insertable<ShoppingCheckRow> {
+  final int sessionId;
+  final String productId;
+  final DateTime checkedAt;
+  const ShoppingCheckRow({
+    required this.sessionId,
+    required this.productId,
+    required this.checkedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['session_id'] = Variable<int>(sessionId);
+    map['product_id'] = Variable<String>(productId);
+    map['checked_at'] = Variable<DateTime>(checkedAt);
+    return map;
+  }
+
+  ShoppingChecksCompanion toCompanion(bool nullToAbsent) {
+    return ShoppingChecksCompanion(
+      sessionId: Value(sessionId),
+      productId: Value(productId),
+      checkedAt: Value(checkedAt),
+    );
+  }
+
+  factory ShoppingCheckRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ShoppingCheckRow(
+      sessionId: serializer.fromJson<int>(json['sessionId']),
+      productId: serializer.fromJson<String>(json['productId']),
+      checkedAt: serializer.fromJson<DateTime>(json['checkedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'sessionId': serializer.toJson<int>(sessionId),
+      'productId': serializer.toJson<String>(productId),
+      'checkedAt': serializer.toJson<DateTime>(checkedAt),
+    };
+  }
+
+  ShoppingCheckRow copyWith({
+    int? sessionId,
+    String? productId,
+    DateTime? checkedAt,
+  }) => ShoppingCheckRow(
+    sessionId: sessionId ?? this.sessionId,
+    productId: productId ?? this.productId,
+    checkedAt: checkedAt ?? this.checkedAt,
+  );
+  ShoppingCheckRow copyWithCompanion(ShoppingChecksCompanion data) {
+    return ShoppingCheckRow(
+      sessionId: data.sessionId.present ? data.sessionId.value : this.sessionId,
+      productId: data.productId.present ? data.productId.value : this.productId,
+      checkedAt: data.checkedAt.present ? data.checkedAt.value : this.checkedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ShoppingCheckRow(')
+          ..write('sessionId: $sessionId, ')
+          ..write('productId: $productId, ')
+          ..write('checkedAt: $checkedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(sessionId, productId, checkedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ShoppingCheckRow &&
+          other.sessionId == this.sessionId &&
+          other.productId == this.productId &&
+          other.checkedAt == this.checkedAt);
+}
+
+class ShoppingChecksCompanion extends UpdateCompanion<ShoppingCheckRow> {
+  final Value<int> sessionId;
+  final Value<String> productId;
+  final Value<DateTime> checkedAt;
+  final Value<int> rowid;
+  const ShoppingChecksCompanion({
+    this.sessionId = const Value.absent(),
+    this.productId = const Value.absent(),
+    this.checkedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ShoppingChecksCompanion.insert({
+    required int sessionId,
+    required String productId,
+    required DateTime checkedAt,
+    this.rowid = const Value.absent(),
+  }) : sessionId = Value(sessionId),
+       productId = Value(productId),
+       checkedAt = Value(checkedAt);
+  static Insertable<ShoppingCheckRow> custom({
+    Expression<int>? sessionId,
+    Expression<String>? productId,
+    Expression<DateTime>? checkedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (sessionId != null) 'session_id': sessionId,
+      if (productId != null) 'product_id': productId,
+      if (checkedAt != null) 'checked_at': checkedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ShoppingChecksCompanion copyWith({
+    Value<int>? sessionId,
+    Value<String>? productId,
+    Value<DateTime>? checkedAt,
+    Value<int>? rowid,
+  }) {
+    return ShoppingChecksCompanion(
+      sessionId: sessionId ?? this.sessionId,
+      productId: productId ?? this.productId,
+      checkedAt: checkedAt ?? this.checkedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (sessionId.present) {
+      map['session_id'] = Variable<int>(sessionId.value);
+    }
+    if (productId.present) {
+      map['product_id'] = Variable<String>(productId.value);
+    }
+    if (checkedAt.present) {
+      map['checked_at'] = Variable<DateTime>(checkedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ShoppingChecksCompanion(')
+          ..write('sessionId: $sessionId, ')
+          ..write('productId: $productId, ')
+          ..write('checkedAt: $checkedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $GoalsTable goals = $GoalsTable(this);
   late final $MealSlotsTable mealSlots = $MealSlotsTable(this);
   late final $SessionsTable sessions = $SessionsTable(this);
+  late final $ShoppingChecksTable shoppingChecks = $ShoppingChecksTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1068,6 +1339,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     goals,
     mealSlots,
     sessions,
+    shoppingChecks,
   ];
 }
 
@@ -1668,6 +1940,183 @@ typedef $$SessionsTableProcessedTableManager =
       SessionRow,
       PrefetchHooks Function()
     >;
+typedef $$ShoppingChecksTableCreateCompanionBuilder =
+    ShoppingChecksCompanion Function({
+      required int sessionId,
+      required String productId,
+      required DateTime checkedAt,
+      Value<int> rowid,
+    });
+typedef $$ShoppingChecksTableUpdateCompanionBuilder =
+    ShoppingChecksCompanion Function({
+      Value<int> sessionId,
+      Value<String> productId,
+      Value<DateTime> checkedAt,
+      Value<int> rowid,
+    });
+
+class $$ShoppingChecksTableFilterComposer
+    extends Composer<_$AppDatabase, $ShoppingChecksTable> {
+  $$ShoppingChecksTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get sessionId => $composableBuilder(
+    column: $table.sessionId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get productId => $composableBuilder(
+    column: $table.productId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get checkedAt => $composableBuilder(
+    column: $table.checkedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$ShoppingChecksTableOrderingComposer
+    extends Composer<_$AppDatabase, $ShoppingChecksTable> {
+  $$ShoppingChecksTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get sessionId => $composableBuilder(
+    column: $table.sessionId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get productId => $composableBuilder(
+    column: $table.productId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get checkedAt => $composableBuilder(
+    column: $table.checkedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ShoppingChecksTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ShoppingChecksTable> {
+  $$ShoppingChecksTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get sessionId =>
+      $composableBuilder(column: $table.sessionId, builder: (column) => column);
+
+  GeneratedColumn<String> get productId =>
+      $composableBuilder(column: $table.productId, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get checkedAt =>
+      $composableBuilder(column: $table.checkedAt, builder: (column) => column);
+}
+
+class $$ShoppingChecksTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ShoppingChecksTable,
+          ShoppingCheckRow,
+          $$ShoppingChecksTableFilterComposer,
+          $$ShoppingChecksTableOrderingComposer,
+          $$ShoppingChecksTableAnnotationComposer,
+          $$ShoppingChecksTableCreateCompanionBuilder,
+          $$ShoppingChecksTableUpdateCompanionBuilder,
+          (
+            ShoppingCheckRow,
+            BaseReferences<
+              _$AppDatabase,
+              $ShoppingChecksTable,
+              ShoppingCheckRow
+            >,
+          ),
+          ShoppingCheckRow,
+          PrefetchHooks Function()
+        > {
+  $$ShoppingChecksTableTableManager(
+    _$AppDatabase db,
+    $ShoppingChecksTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ShoppingChecksTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ShoppingChecksTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ShoppingChecksTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> sessionId = const Value.absent(),
+                Value<String> productId = const Value.absent(),
+                Value<DateTime> checkedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ShoppingChecksCompanion(
+                sessionId: sessionId,
+                productId: productId,
+                checkedAt: checkedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required int sessionId,
+                required String productId,
+                required DateTime checkedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => ShoppingChecksCompanion.insert(
+                sessionId: sessionId,
+                productId: productId,
+                checkedAt: checkedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$ShoppingChecksTable, ShoppingCheckRow>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $ShoppingChecksTable,
+                    ShoppingCheckRow
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ShoppingChecksTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ShoppingChecksTable,
+      ShoppingCheckRow,
+      $$ShoppingChecksTableFilterComposer,
+      $$ShoppingChecksTableOrderingComposer,
+      $$ShoppingChecksTableAnnotationComposer,
+      $$ShoppingChecksTableCreateCompanionBuilder,
+      $$ShoppingChecksTableUpdateCompanionBuilder,
+      (
+        ShoppingCheckRow,
+        BaseReferences<_$AppDatabase, $ShoppingChecksTable, ShoppingCheckRow>,
+      ),
+      ShoppingCheckRow,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -1678,4 +2127,6 @@ class $AppDatabaseManager {
       $$MealSlotsTableTableManager(_db, _db.mealSlots);
   $$SessionsTableTableManager get sessions =>
       $$SessionsTableTableManager(_db, _db.sessions);
+  $$ShoppingChecksTableTableManager get shoppingChecks =>
+      $$ShoppingChecksTableTableManager(_db, _db.shoppingChecks);
 }

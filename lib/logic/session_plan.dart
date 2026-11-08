@@ -176,3 +176,24 @@ class SessionPlan {
     'recipes': recipes,
   };
 }
+
+/// Sesja, którą domyślnie pokazujemy w Zakupach: najwcześniejsza z tych,
+/// które jeszcze się nie skończyły (trwa albo dopiero będzie). Gdy takich
+/// nie ma, najnowsza. `null`, gdy nie ma żadnej sesji.
+SessionPlan? defaultShoppingSession(
+  List<SessionPlan> sessions,
+  DateTime today,
+) {
+  final t = dateOnly(today);
+  SessionPlan? best;
+  for (final s in sessions) {
+    if (s.lastDay.isBefore(t)) continue;
+    if (best == null || s.firstDay.isBefore(best.firstDay)) best = s;
+  }
+  if (best != null) return best;
+  SessionPlan? newest;
+  for (final s in sessions) {
+    if (newest == null || s.firstDay.isAfter(newest.firstDay)) newest = s;
+  }
+  return newest;
+}

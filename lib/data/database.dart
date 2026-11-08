@@ -57,7 +57,19 @@ class Sessions extends Table {
   DateTimeColumn get updatedAt => dateTime()();
 }
 
-@DriftDatabase(tables: [Goals, MealSlots, Sessions])
+/// Odhaczone pozycje listy zakupów: jeden wiersz = produkt kupiony
+/// w danej sesji. Brak wiersza = jeszcze nie kupiony.
+@DataClassName('ShoppingCheckRow')
+class ShoppingChecks extends Table {
+  IntColumn get sessionId => integer()();
+  TextColumn get productId => text()();
+  DateTimeColumn get checkedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {sessionId, productId};
+}
+
+@DriftDatabase(tables: [Goals, MealSlots, Sessions, ShoppingChecks])
 class AppDatabase extends _$AppDatabase {
   /// Bez argumentu: plik `mealprep.sqlite` w folderze danych aplikacji.
   /// W testach podajemy bazę w pamięci (`NativeDatabase.memory()`).
@@ -65,7 +77,7 @@ class AppDatabase extends _$AppDatabase {
     : super(executor ?? driftDatabase(name: 'mealprep'));
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -77,13 +89,20 @@ class AppDatabase extends _$AppDatabase {
     // Baza z poprzedniej wersji aplikacji: dokładamy tylko to, czego brakuje.
     onUpgrade: (m, from, to) async {
       if (from < 2) await m.createTable(sessions);
+      if (from < 3) await m.createTable(shoppingChecks);
     },
   );
 
   // ------------------------------------------------------------- cele
 
-  Future<Settings> loadSettings() async {
-    final row = await select(goals).getSingleOrNull();
+  Future<Settings> loadSettings() async =>
+      _toSettings(await select(goals).getSingleOrNull());
+
+  /// Jak [loadSettings], ale strumień: nowa wartość po każdej zmianie celów.
+  Stream<Settings> watchSettings() =>
+      select(goals).watchSingleOrNull().map(_toSettings);
+
+  static Settings _toSettings(GoalsRow? row) {
     if (row == null) return defaultSettings;
     return Settings(
       target: Macros(kcal: row.kcal, p: row.protein, f: row.fat, c: row.carbs),
@@ -130,18 +149,23 @@ class AppDatabase extends _$AppDatabase {
   // ----------------------------------------------------------- sesje
 
   /// Wszystkie sesje, najnowsze na górze.
-  Future<List<SessionPlan>> loadSessions() async {
-    final rows = await (select(
-      sessions,
-    )..orderBy([(t) => OrderingTerm.desc(t.firstDay)])).get();
-    return [
-      for (final r in rows)
-        SessionPlan.fromJson(
-          jsonDecode(r.data) as Map<String, dynamic>,
-          id: r.id,
-        ),
-    ];
-  }
+  Future<List<SessionPlan>> loadSessions() async =>
+      _toPlans(await _sessionsQuery().get());
+
+  /// Strumień sesji: nowa lista po każdej zmianie (np. w edytorze sesji).
+  Stream<List<SessionPlan>> watchSessions() =>
+      _sessionsQuery().watch().map(_toPlans);
+
+  SimpleSelectStatement<$SessionsTable, SessionRow> _sessionsQuery() =>
+      select(sessions)..orderBy([(t) => OrderingTerm.desc(t.firstDay)]);
+
+  static List<SessionPlan> _toPlans(List<SessionRow> rows) => [
+    for (final r in rows)
+      SessionPlan.fromJson(
+        jsonDecode(r.data) as Map<String, dynamic>,
+        id: r.id,
+      ),
+  ];
 
   /// Zapisuje sesję i zwraca ją z nadanym ID.
   Future<SessionPlan> saveSession(SessionPlan plan) async {
@@ -158,6 +182,39 @@ class AppDatabase extends _$AppDatabase {
     return plan;
   }
 
-  Future<void> deleteSession(int id) =>
-      (delete(sessions)..where((t) => t.id.equals(id))).go();
+  /// Usuwa sesję razem z jej odhaczeniami na liście zakupów.
+  Future<void> deleteSession(int id) => transaction(() async {
+    await (delete(shoppingChecks)..where((t) => t.sessionId.equals(id))).go();
+    await (delete(sessions)..where((t) => t.id.equals(id))).go();
+  });
+
+  // ---------------------------------------------------- lista zakupów
+
+  /// ID produktów odhaczonych w sesji (strumień, odświeża się po każdej zmianie).
+  Stream<Set<String>> watchChecks(int sessionId) =>
+      (select(shoppingChecks)..where((t) => t.sessionId.equals(sessionId)))
+          .watch()
+          .map((rows) => {for (final r in rows) r.productId});
+
+  Future<void> setChecked(int sessionId, String productId, bool checked) async {
+    if (checked) {
+      await into(shoppingChecks).insertOnConflictUpdate(
+        ShoppingChecksCompanion.insert(
+          sessionId: sessionId,
+          productId: productId,
+          checkedAt: DateTime.now(),
+        ),
+      );
+    } else {
+      await (delete(shoppingChecks)..where(
+            (t) =>
+                t.sessionId.equals(sessionId) & t.productId.equals(productId),
+          ))
+          .go();
+    }
+  }
+
+  Future<void> clearChecks(int sessionId) => (delete(
+    shoppingChecks,
+  )..where((t) => t.sessionId.equals(sessionId))).go();
 }

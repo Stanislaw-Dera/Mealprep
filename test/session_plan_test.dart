@@ -84,4 +84,28 @@ void main() {
     expect(mealTypeForSlot('Kolacja'), 'kolacja');
     expect(mealTypeForSlot('Po treningu'), isNull);
   });
+
+  test('domyślna sesja do zakupów', () {
+    SessionPlan s(int id, int day, int n) => SessionPlan(
+      id: id,
+      firstDay: DateTime(2026, 11, day),
+      slots: slots,
+      days: List.filled(n, const PlanDay()),
+    );
+    final past = s(1, 2, 4); // 2–5.11
+    final now = s(2, 6, 3); // 6–8.11
+    final next = s(3, 9, 4); // 9–12.11
+    final all = [next, now, past];
+
+    expect(defaultShoppingSession(all, DateTime(2026, 11, 7))!.id, 2); // trwa
+    expect(
+      defaultShoppingSession(all, DateTime(2026, 11, 9))!.id,
+      3,
+    ); // kolejna
+    expect(
+      defaultShoppingSession(all, DateTime(2026, 12, 1))!.id,
+      3,
+    ); // najnowsza
+    expect(defaultShoppingSession(const [], DateTime(2026, 11, 7)), isNull);
+  });
 }

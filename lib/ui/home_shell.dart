@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'screens/placeholder_screen.dart';
 import 'screens/plan_screen.dart';
 import 'screens/settings_screen.dart';
+import 'screens/shopping_screen.dart';
 
 /// Główny układ: 4 zakładki. Na wąskim ekranie (telefon) dolny pasek,
 /// na szerokim (Mac) boczny panel.
@@ -35,10 +36,7 @@ class _HomeShellState extends State<HomeShell> {
 
   Widget _screen(int i) => switch (i) {
     0 => const PlanScreen(),
-    1 => const PlaceholderScreen(
-      title: 'Zakupy',
-      text: 'Tu będzie lista zakupów z sesji, po działach Biedronki.',
-    ),
+    1 => const ShoppingScreen(),
     2 => const PlaceholderScreen(
       title: 'Gotowanie',
       text: 'Tu będzie tryb gotowania: suma składników i kroki z minutnikami.',
