@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'screens/placeholder_screen.dart';
+import 'screens/cooking_screen.dart';
 import 'screens/plan_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/shopping_screen.dart';
@@ -37,10 +37,7 @@ class _HomeShellState extends State<HomeShell> {
   Widget _screen(int i) => switch (i) {
     0 => const PlanScreen(),
     1 => const ShoppingScreen(),
-    2 => const PlaceholderScreen(
-      title: 'Gotowanie',
-      text: 'Tu będzie tryb gotowania: suma składników i kroki z minutnikami.',
-    ),
+    2 => const CookingScreen(),
     _ => const SettingsScreen(),
   };
 

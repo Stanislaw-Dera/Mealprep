@@ -28,7 +28,7 @@ python3 tools/export_test_fixture.py       # wyniki prototypu dla testów w Darc
 ## Status
 - [x] Specyfikacja, format przepisu, baza produktów, przepisy startowe
 - [x] Prototyp algorytmu (skalowanie, zakupy, wspólny plan sesji)
-- [ ] Instalacja narzędzi na Macu (Xcode, Homebrew, Flutter)
-- [ ] Etap 1: aplikacja Flutter na macOS z danymi lokalnymi
+- [x] Instalacja narzędzi na Macu (Xcode, Homebrew, Flutter)
+- [x] Etap 1: aplikacja Flutter na macOS z danymi lokalnymi (cele, plan sesji, zakupy, gotowanie)
 - [ ] Etap 2: Supabase i Android
 - [ ] Etap 3: import przez wklejanie, skaner, iOS
