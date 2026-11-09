@@ -16,14 +16,16 @@ Stan na start (commit `c06de44`): Etap 1 gotowy na macOS, 41 testów przechodzi,
 
 ### Do zrobienia
 - [ ] `flutter doctor` bez błędów dla Androida; `flutter run -d <telefon>` działa.
-- [ ] Sprawdzić `applicationId` (`pl.dera.mealprep`), nazwę aplikacji „Mealprep", ikonę (może być domyślna na razie).
-- [ ] Uprawnienie `INTERNET` w `AndroidManifest.xml` dla wersji release (potrzebne do Supabase; debug ma je domyślnie).
-- [ ] Ekran nie wygasa w trakcie gotowania: pakiet `wakelock_plus` (darmowy), włączony tylko na ekranie dania.
+- [x] Sprawdzić `applicationId` (`pl.dera.mealprep`), nazwę aplikacji „Mealprep", ikonę (może być domyślna na razie).
+- [x] Uprawnienie `INTERNET` w `AndroidManifest.xml` dla wersji release (potrzebne do Supabase; debug ma je domyślnie).
+- [x] Ekran nie wygasa w trakcie gotowania: pakiet `wakelock_plus` (darmowy), włączony tylko na ekranie dania.
 - [ ] Dźwięk minutnika (`audioplayers`, `assets/sounds/timer_done.wav`) działa na telefonie.
-- [ ] Wygląd na wąskim ekranie: dolny pasek nawigacji, karty dni w planie w jednej kolumnie, nic nie wychodzi poza ekran.
+- [x] Wygląd na wąskim ekranie: dolny pasek nawigacji, karty dni w planie w jednej kolumnie, nic nie wychodzi poza ekran.
       Sprawdzić wszystkie 4 zakładki i ekran dania; poprawić to, co się nie mieści.
+      (Poprawione: przyciski Zapisz/Cofnij w Ustawieniach i Start/Od nowa przy minutniku zawijają się.)
 - [ ] `flutter build apk --release` (podpis kluczem debug wystarczy do instalacji z pliku), instrukcja instalacji APK na telefonie.
-- [ ] Testy: istniejące muszą przejść; ewentualnie test widgetu na wąskim ekranie (np. 390×844).
+- [x] Testy: istniejące muszą przejść; test wąskiego ekranu `test/narrow_screen_test.dart`
+      (360×740 i 390×844, także czcionka ×1.3).
 
 ---
 
