@@ -2,8 +2,9 @@ import 'package:flutter/widgets.dart';
 
 import '../data/database.dart';
 import '../logic/models.dart';
+import 'cooking_timers.dart';
 
-/// Udostępnia bazę i katalog przepisów wszystkim ekranom.
+/// Udostępnia bazę, katalog przepisów i minutniki wszystkim ekranom.
 ///
 /// `InheritedWidget` to wbudowany we Fluttera sposób na przekazanie obiektu
 /// w dół drzewa widgetów bez podawania go przez każdy konstruktor.
@@ -13,11 +14,13 @@ class AppScope extends InheritedWidget {
     super.key,
     required this.db,
     required this.catalog,
+    required this.timers,
     required super.child,
   });
 
   final AppDatabase db;
   final Catalog catalog;
+  final CookingTimers timers;
 
   static AppScope of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<AppScope>();
@@ -27,5 +30,5 @@ class AppScope extends InheritedWidget {
 
   @override
   bool updateShouldNotify(AppScope old) =>
-      db != old.db || catalog != old.catalog;
+      db != old.db || catalog != old.catalog || timers != old.timers;
 }

@@ -4,6 +4,7 @@ import '../../logic/cooking.dart';
 import '../../logic/models.dart';
 import '../app_scope.dart';
 import '../widgets/session_view.dart';
+import '../widgets/timer_chips.dart';
 import 'cook_recipe_screen.dart';
 
 /// Zakładka „Gotowanie": dania wybranej sesji z łącznymi ilościami
@@ -25,7 +26,25 @@ class CookingScreen extends StatelessWidget {
           0,
           (s, id) => s + catalog.recipes[id]!.timeMin,
         );
+        void open(String id, {int? step}) => Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => CookRecipeScreen(
+              recipe: catalog.recipes[id]!,
+              totals: recipeTotals(data.portions, id),
+              boxes: boxesFor(data.portions, id),
+              initialStep: step,
+            ),
+          ),
+        );
         return [
+          // Minutniki chodzą też po wyjściu z ekranu dania.
+          TimerChips(
+            onTap: (t) {
+              if (recipeIds.contains(t.recipe.id)) {
+                open(t.recipe.id, step: t.step);
+              }
+            },
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
             child: Text(
@@ -40,6 +59,7 @@ class CookingScreen extends StatelessWidget {
               recipe: catalog.recipes[id]!,
               totals: recipeTotals(data.portions, id),
               boxes: boxesFor(data.portions, id),
+              onCook: () => open(id),
             ),
         ];
       },
@@ -52,11 +72,13 @@ class _RecipeCard extends StatelessWidget {
     required this.recipe,
     required this.totals,
     required this.boxes,
+    required this.onCook,
   });
 
   final Recipe recipe;
   final List<Amount> totals;
   final List<Box> boxes;
+  final VoidCallback onCook;
 
   @override
   Widget build(BuildContext context) {
@@ -92,15 +114,7 @@ class _RecipeCard extends StatelessWidget {
                 ),
             const SizedBox(height: 12),
             FilledButton.icon(
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => CookRecipeScreen(
-                    recipe: recipe,
-                    totals: totals,
-                    boxes: boxes,
-                  ),
-                ),
-              ),
+              onPressed: onCook,
               icon: const Icon(Icons.play_arrow),
               label: const Text('Gotuj krok po kroku'),
             ),

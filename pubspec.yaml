@@ -7,6 +7,7 @@ environment:
   sdk: ^3.13.7
 
 dependencies:
+  audioplayers: ^6.8.1
   drift: ^2.35.3
   drift_flutter: ^0.3.1
   flutter:
@@ -28,3 +29,5 @@ flutter:
   assets:
     - data/products.json
     - data/recipes/
+    # Dźwięk końca minutnika (tools/make_timer_sound.py)
+    - assets/sounds/

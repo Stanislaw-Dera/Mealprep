@@ -89,17 +89,36 @@ void main() {
     await tester.tap(find.text('Dalej'));
     await tester.pump();
     expect(find.text('Krok 2 z 6'), findsOneWidget);
-    expect(find.textContaining('Krok 1 · '), findsOneWidget);
+    expect(find.textContaining('Chili con… · krok 1 · '), findsOneWidget);
 
-    // Wyjście przy działającym minutniku pyta o zgodę.
+    // Wyjście z ekranu: minutnik chodzi dalej (bez pytania).
     await tester.tap(find.byType(BackButton));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 300));
-    expect(find.text('Minutniki dalej chodzą'), findsOneWidget);
-    await tester.tap(find.text('Wyjdź'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
     expect(find.text('Gotuj krok po kroku'), findsNWidgets(2));
+    expect(find.textContaining('Chili con… · krok 1 · '), findsOneWidget);
+    expect(find.text('1'), findsOneWidget); // licznik na ikonie zakładki
+
+    // Drugi minutnik w innym daniu: dwa naraz.
+    await tester.tap(find.text('Gotuj krok po kroku').last);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.tap(find.text('Do kroków'));
+    await tester.pump();
+    await tester.tap(find.text('Start'));
+    await tester.pump();
+    expect(find.textContaining('Chili con… · krok 1 · '), findsOneWidget);
+    await tester.tap(find.byType(BackButton));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('2'), findsOneWidget);
+
+    // Kliknięcie w minutnik otwiera danie na jego kroku.
+    await tester.tap(find.textContaining('Chili con… · krok 1 · '));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Krok 1 z 6'), findsOneWidget);
+    expect(find.text('Pauza'), findsOneWidget);
   });
 
   testAppWidgets('gramy na pudełko po zważeniu potrawy', (tester) async {
