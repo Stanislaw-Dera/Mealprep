@@ -26,11 +26,35 @@ Osobista aplikacja do meal prepu dla jednej osoby (właściciel repo). Pełna sp
 - `tools/mealprep_proto.py`: **wzorcowa implementacja logiki** (walidacja, solver skalowania, lista zakupów, harmonogram sesji).
   Logikę w Darcie przenieś z tego pliku 1:1 i dopisz testy, które dają takie same wyniki jak `python3 tools/mealprep_proto.py demo`.
 
-## Kolejność prac
-1. **Etap 1, macOS, dane lokalne**: `flutter create` (platformy: macos, android, ios), modele, wczytanie danych z assets, ekran celów,
-   planowanie sesji ze skalowaniem, lista zakupów, tryb gotowania.
-2. Etap 2: Supabase (logowanie i synchronizacja planu oraz listy), build na Androida.
-3. Etap 3: import przepisów przez wklejanie JSON-a, wspólny plan sesji w interfejsie, skaner, iOS.
+## Kolejność prac i stan (aktualizuj po każdym etapie)
+1. ✅ **Etap 1, macOS, dane lokalne**: gotowy i przetestowany przez użytkownika (listopad 2026).
+2. ⏳ **Etap 2**: Supabase (logowanie i synchronizacja) oraz build na Androida. **Plan i stan: `docs/ETAP2.md`.**
+3. Etap 3: import przepisów przez wklejanie JSON-a, wspólny plan sesji w interfejsie (logika już jest: `schedule.dart`), skaner, iOS.
+
+Uwagi użytkownika do zrobienia przy okazji: dźwięk końca minutnika to placeholder do dostrojenia później.
+
+## Jak zbudowana jest aplikacja
+- `lib/logic/`: czysty Dart, bez Fluttera. Port 1:1 z prototypu: `models`, `validate`, `scaling` (solver, `pyRound`),
+  `session` (`planSession`, `potShares`), `shopping`, `schedule`. Do tego `session_plan` (plan z datami → `toSession()`),
+  `cooking` (sumy na partię, pudełka, tekst kroków, `StepTimer`), `defaults` (domyślne cele i posiłki).
+- `lib/data/database.dart`: SQLite przez **drift** (schemat v3: `goals`, `meal_slots`, `sessions` z planem jako JSON,
+  `shopping_checks`). Po zmianie tabel: `dart run build_runner build`, podbij `schemaVersion` i dopisz `onUpgrade`
+  (użytkownik ma już prawdziwą bazę na Macu, migracje muszą ją zachować; test migracji jest w `test/database_test.dart`).
+- `lib/ui/`: `app_scope.dart` (InheritedWidget: baza, katalog, minutniki), `home_shell.dart` (4 zakładki: Plan, Zakupy,
+  Gotowanie, Ustawienia; pasek dolny albo panel boczny), `cooking_timers.dart` (minutniki dla całej aplikacji),
+  `widgets/session_view.dart` (wybór sesji dla Zakupów i Gotowania), ekrany w `screens/`.
+- Zakupy i Gotowanie słuchają bazy przez strumienie drift (`watch...`), Plan i Ustawienia czytają raz.
+
+## Testy i pułapki
+- `tools/export_test_fixture.py` zapisuje wyniki prototypu do `test/fixtures/proto_expected.json`;
+  `test/logic_parity_test.dart` porównuje z nimi Darta co do wartości. Po zmianie danych/prototypu wygeneruj fixture od nowa.
+- Testy całej aplikacji pisz przez `testAppWidgets` i `settle` z `test/app_test_utils.dart`. Bez tego strumienie drift
+  zostawiają timer i test się wywraca albo **zawiesza**. Gdy działa minutnik, nie używaj `pumpAndSettle` (nie skończy się),
+  tylko `pump(Duration)`.
+- `flutter test` puszczaj z `--timeout 40s` (na macOS nie ma polecenia `timeout`).
+- Opis commita z polskimi cudzysłowami („…") zapisuj do pliku i używaj `git commit -F plik`, inaczej psuje się cytowanie w shellu.
+- Baza aplikacji na Macu: `~/Library/Containers/pl.dera.mealprep/Data/Documents/mealprep.sqlite` (można podejrzeć `sqlite3`).
+- Zrzuty ekranu macOS są zablokowane; wygląd UI sprawdza użytkownik.
 
 Po każdym większym kroku uruchom `flutter analyze` i `flutter test`. Aplikację odpalaj przez `flutter run -d macos`.
 Rób małe commity w gicie.

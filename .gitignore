@@ -30,3 +30,6 @@ android/app/release
 **/Flutter/ephemeral/
 **/Flutter/Generated.xcconfig
 **/Flutter/flutter_export_environment.sh
+
+# Dane projektu Supabase (wzór: supabase.example.json)
+supabase.json
