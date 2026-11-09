@@ -15,7 +15,7 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        // Identyfikator aplikacji na Androidzie (taki sam jak bundle ID na macOS).
         applicationId = "pl.dera.mealprep"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
@@ -31,8 +31,8 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            // Podpis kluczem debug: wystarczy do instalacji z pliku APK na
+            // własnym telefonie (do Sklepu Play potrzebny byłby własny klucz).
             signingConfig = signingConfigs.getByName("debug")
         }
     }

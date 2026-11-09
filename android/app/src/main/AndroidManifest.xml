@@ -1,6 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Internet dla synchronizacji z Supabase. Wersja debug ma go zawsze,
+         release tylko wtedy, gdy jest tu wpisany. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="mealprep"
+        android:label="Mealprep"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
