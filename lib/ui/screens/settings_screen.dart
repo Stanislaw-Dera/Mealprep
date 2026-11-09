@@ -239,14 +239,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 _sectionTitle(theme, 'Podgląd celu na posiłek'),
                 _preview(theme),
                 const SizedBox(height: 24),
-                Row(
+                // Wrap zamiast Row: na wąskim telefonie przyciski
+                // przechodzą do nowej linii zamiast wychodzić poza ekran.
+                Wrap(
+                  spacing: 12,
+                  runSpacing: 8,
                   children: [
                     FilledButton.icon(
                       onPressed: _dirty && !_saving ? _save : null,
                       icon: const Icon(Icons.save_outlined),
                       label: const Text('Zapisz'),
                     ),
-                    const SizedBox(width: 12),
                     TextButton(
                       onPressed: _dirty && !_saving ? _revert : null,
                       child: const Text('Cofnij zmiany'),

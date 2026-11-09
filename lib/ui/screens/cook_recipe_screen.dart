@@ -248,8 +248,10 @@ class _CookRecipeScreenState extends State<CookRecipeScreen> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 12,
+                    runSpacing: 8,
                     children: [
                       FilledButton.icon(
                         onPressed: t.finished(now)
@@ -264,7 +266,6 @@ class _CookRecipeScreenState extends State<CookRecipeScreen> {
                               : 'Start',
                         ),
                       ),
-                      const SizedBox(width: 12),
                       TextButton.icon(
                         onPressed: t.started(now)
                             ? () => timers.reset(ct)
