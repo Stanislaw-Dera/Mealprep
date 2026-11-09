@@ -10,22 +10,30 @@ Stan na start (commit `c06de44`): Etap 1 gotowy na macOS, 41 testów przechodzi,
 ## Tor A: Android (build i instalacja z pliku APK)
 
 ### Po stronie użytkownika
-- [ ] Zainstalować **Android Studio** (darmowe), przejść pierwsze uruchomienie (instaluje Android SDK).
-- [ ] `flutter doctor --android-licenses` i sprawdzić `flutter doctor` (sekcja Android ma być ✓).
-- [ ] Telefon: włączyć opcje programisty i debugowanie USB (albo emulator z Android Studio).
+- [x] Zainstalować **Android Studio** (darmowe), przejść pierwsze uruchomienie (instaluje Android SDK).
+- [x] `flutter doctor --android-licenses` i sprawdzić `flutter doctor` (sekcja Android ma być ✓).
+- [x] Telefon: włączyć opcje programisty i debugowanie USB (albo emulator z Android Studio).
+      Użyty emulator; na telefon APK z pliku (`docs/ANDROID.md`).
 
 ### Do zrobienia
-- [ ] `flutter doctor` bez błędów dla Androida; `flutter run -d <telefon>` działa.
+- [x] `flutter doctor` bez błędów dla Androida; aplikacja działa na emulatorze (Android 37).
 - [x] Sprawdzić `applicationId` (`pl.dera.mealprep`), nazwę aplikacji „Mealprep", ikonę (może być domyślna na razie).
 - [x] Uprawnienie `INTERNET` w `AndroidManifest.xml` dla wersji release (potrzebne do Supabase; debug ma je domyślnie).
 - [x] Ekran nie wygasa w trakcie gotowania: pakiet `wakelock_plus` (darmowy), włączony tylko na ekranie dania.
-- [ ] Dźwięk minutnika (`audioplayers`, `assets/sounds/timer_done.wav`) działa na telefonie.
+- [x] Dźwięk minutnika (`audioplayers`, `assets/sounds/timer_done.wav`) działa na telefonie.
 - [x] Wygląd na wąskim ekranie: dolny pasek nawigacji, karty dni w planie w jednej kolumnie, nic nie wychodzi poza ekran.
       Sprawdzić wszystkie 4 zakładki i ekran dania; poprawić to, co się nie mieści.
       (Poprawione: przyciski Zapisz/Cofnij w Ustawieniach i Start/Od nowa przy minutniku zawijają się.)
-- [ ] `flutter build apk --release` (podpis kluczem debug wystarczy do instalacji z pliku), instrukcja instalacji APK na telefonie.
+- [x] `flutter build apk --release` (podpis kluczem debug wystarczy do instalacji z pliku), instrukcja instalacji APK na telefonie:
+      `docs/ANDROID.md`.
 - [x] Testy: istniejące muszą przejść; test wąskiego ekranu `test/narrow_screen_test.dart`
       (360×740 i 390×844, także czcionka ×1.3).
+
+Sprawdzone na emulatorze (wersja release): wszystkie zakładki, ekran dania, flaga `KEEP_SCREEN_ON` tylko na
+ekranie dania, dźwięk końca minutnika (MediaPlayer bez błędów), aktualizacja APK zachowuje dane.
+Do sprawdzenia na prawdziwym telefonie: głośność dźwięku. Teraz leci na kanale multimediów, więc przy
+wyciszonych multimediach go nie słychać; ewentualnie przestawić na kanał alarmu. Minutnik nie budzi telefonu,
+gdy aplikacja jest w tle (to by wymagało powiadomień, ewentualnie w Etapie 3).
 
 ---
 
