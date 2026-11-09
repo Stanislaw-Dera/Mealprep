@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../logic/cooking.dart';
 import '../../logic/models.dart';
@@ -50,9 +51,27 @@ class _CookRecipeScreenState extends State<CookRecipeScreen> {
   };
 
   @override
+  void initState() {
+    super.initState();
+    // Ekran nie wygasa, dopóki gotujesz to danie (telefon leży na blacie).
+    _keepScreenOn(true);
+  }
+
+  @override
   void dispose() {
+    _keepScreenOn(false);
     _weight.dispose();
     super.dispose();
+  }
+
+  /// Włącza/wyłącza blokadę wygaszania ekranu. Błąd (np. w testach, gdzie
+  /// nie ma systemu) nie może przeszkodzić w gotowaniu.
+  Future<void> _keepScreenOn(bool on) async {
+    try {
+      await WakelockPlus.toggle(enable: on);
+    } catch (e) {
+      debugPrint('Blokada wygaszania ekranu niedostępna: $e');
+    }
   }
 
   // ------------------------------------------------------------- widok
