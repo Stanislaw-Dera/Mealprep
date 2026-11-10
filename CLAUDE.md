@@ -28,9 +28,10 @@ Osobista aplikacja do meal prepu dla jednej osoby (właściciel repo). Pełna sp
 
 ## Kolejność prac i stan (aktualizuj po każdym etapie)
 1. ✅ **Etap 1, macOS, dane lokalne**: gotowy i przetestowany przez użytkownika (listopad 2026).
-2. ⏳ **Etap 2**: Supabase (logowanie i synchronizacja) oraz build na Androida. **Plan i stan: `docs/ETAP2.md`.**
+2. ✅ **Etap 2**: Supabase (logowanie i synchronizacja) oraz build na Androida, gotowy i przetestowany (listopad 2026).
+   Szczegóły: `docs/ETAP2.md`.
    Tor A (Android) gotowy: APK i emulator opisane w `docs/ANDROID.md`.
-   Tor B (Supabase) w kodzie gotowy (gałąź `etap2-supabase`); czeka na SQL i konto użytkownika w Supabase i test na 2 urządzeniach.
+   Tor B (Supabase): synchronizacja Mac ↔ telefon działa; logowanie osobnym kontem z Authentication → Users.
 3. Etap 3: import przepisów przez wklejanie JSON-a, wspólny plan sesji w interfejsie (logika już jest: `schedule.dart`), skaner, iOS.
 
 Uwagi użytkownika do zrobienia przy okazji: dźwięk końca minutnika to placeholder do dostrojenia później.

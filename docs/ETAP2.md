@@ -43,9 +43,10 @@ gdy aplikacja jest w tle (to by wymagało powiadomień, ewentualnie w Etapie 3).
 - [x] Konto i projekt na supabase.com (darmowy plan).
 - [x] Klucz publishable (w lokalnym `supabase.json`, poza gitem; wzór: `supabase.example.json`).
 - [x] **Project URL** do `supabase.json` (`https://<id>.supabase.co`, w Project Settings → API).
-- [ ] Authentication → Users → *Add user* (e-mail i hasło).
+- [x] Authentication → Users → *Add user* (e-mail i hasło, z *Auto Confirm User*). To osobne konto dla aplikacji,
+      nie konto na supabase.com ani hasło do bazy.
 - [x] Authentication → Sign In / Providers: wyłączyć *Allow new users to sign up* (sprawdzone: `disable_signup: true`).
-- [ ] Wkleić `supabase/schema.sql` w SQL Editor i uruchomić (Run).
+- [x] Wkleić `supabase/schema.sql` w SQL Editor i uruchomić (Run).
 - Nigdy nie podawać Claude'owi klucza `service_role`/`secret` ani hasła do bazy.
 
 ### Założenia
@@ -97,6 +98,7 @@ gdy aplikacja jest w tle (to by wymagało powiadomień, ewentualnie w Etapie 3).
   migracja v3→v4 w `test/database_test.dart`.
 
 ### Do sprawdzenia przez użytkownika
-- [ ] Po wklejeniu SQL i dodaniu użytkownika: zalogować się na Macu (Ustawienia → Synchronizacja), potem na emulatorze/telefonie;
+- [x] Po wklejeniu SQL i dodaniu użytkownika: zalogować się na Macu (Ustawienia → Synchronizacja), potem na emulatorze/telefonie;
       sesja i cele z Maca mają się pojawić na telefonie, odhaczenie na liście zakupów ma być widać na drugim urządzeniu.
+      Sprawdzone 10 listopada 2026: Mac i telefon (APK release), sesje, cele i odhaczenia przechodzą w obie strony.
 - APK z synchronizacją: `flutter build apk --release --dart-define-from-file=supabase.json`.
