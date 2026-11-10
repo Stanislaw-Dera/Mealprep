@@ -21,9 +21,10 @@ bool remoteWins({required int? localMs, required int remoteMs}) =>
 /// bazy chwilę później. Ponowne pobranie tego samego nic nie psuje.
 String? pullSince(String? cursor) {
   if (cursor == null) return null;
-  return DateTime.parse(
-    cursor,
-  ).toUtc().subtract(const Duration(minutes: 1)).toIso8601String();
+  return DateTime.parse(cursor)
+      .toUtc()
+      .subtract(const Duration(minutes: 1))
+      .toIso8601String();
 }
 
 /// Nowszy z dwóch kursorów (czasów `synced_at` z serwera).

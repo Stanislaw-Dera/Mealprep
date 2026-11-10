@@ -30,6 +30,7 @@ Osobista aplikacja do meal prepu dla jednej osoby (właściciel repo). Pełna sp
 1. ✅ **Etap 1, macOS, dane lokalne**: gotowy i przetestowany przez użytkownika (listopad 2026).
 2. ⏳ **Etap 2**: Supabase (logowanie i synchronizacja) oraz build na Androida. **Plan i stan: `docs/ETAP2.md`.**
    Tor A (Android) gotowy: APK i emulator opisane w `docs/ANDROID.md`.
+   Tor B (Supabase) w kodzie gotowy (gałąź `etap2-supabase`); czeka na SQL i konto użytkownika w Supabase i test na 2 urządzeniach.
 3. Etap 3: import przepisów przez wklejanie JSON-a, wspólny plan sesji w interfejsie (logika już jest: `schedule.dart`), skaner, iOS.
 
 Uwagi użytkownika do zrobienia przy okazji: dźwięk końca minutnika to placeholder do dostrojenia później.
@@ -38,8 +39,11 @@ Uwagi użytkownika do zrobienia przy okazji: dźwięk końca minutnika to placeh
 - `lib/logic/`: czysty Dart, bez Fluttera. Port 1:1 z prototypu: `models`, `validate`, `scaling` (solver, `pyRound`),
   `session` (`planSession`, `potShares`), `shopping`, `schedule`. Do tego `session_plan` (plan z datami → `toSession()`),
   `cooking` (sumy na partię, pudełka, tekst kroków, `StepTimer`), `defaults` (domyślne cele i posiłki).
-- `lib/data/database.dart`: SQLite przez **drift** (schemat v3: `goals`, `meal_slots`, `sessions` z planem jako JSON,
-  `shopping_checks`). Po zmianie tabel: `dart run build_runner build`, podbij `schemaVersion` i dopisz `onUpgrade`
+- `lib/data/database.dart`: SQLite przez **drift** (schemat v4: `goals`, `meal_slots`, `sessions` z planem jako JSON,
+  `shopping_checks`, `sync_meta`). Usunięcie sesji to nagrobek (`deleted`), odznaczenie to `checked = false`.
+- Synchronizacja: `lib/logic/sync_merge.dart` (zasady), `lib/data/sync.dart` (silnik i kontroler),
+  `lib/data/supabase_sync.dart` (Supabase), schemat serwera `supabase/schema.sql`. Uruchamianie z synchronizacją:
+  `flutter run -d macos --dart-define-from-file=supabase.json` (bez tego aplikacja działa lokalnie). Po zmianie tabel: `dart run build_runner build`, podbij `schemaVersion` i dopisz `onUpgrade`
   (użytkownik ma już prawdziwą bazę na Macu, migracje muszą ją zachować; test migracji jest w `test/database_test.dart`).
 - `lib/ui/`: `app_scope.dart` (InheritedWidget: baza, katalog, minutniki), `home_shell.dart` (4 zakładki: Plan, Zakupy,
   Gotowanie, Ustawienia; pasek dolny albo panel boczny), `cooking_timers.dart` (minutniki dla całej aplikacji),

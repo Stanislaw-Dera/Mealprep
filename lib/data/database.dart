@@ -240,7 +240,6 @@ class AppDatabase extends _$AppDatabase {
     }
   });
 
-
   // ----------------------------------------------------------- sesje
 
   /// Wszystkie sesje (bez usuniętych), najnowsze na górze.
@@ -273,9 +272,8 @@ class AppDatabase extends _$AppDatabase {
       dirty: const Value(true),
     );
     if (plan.id == null) {
-      final id = await into(
-        sessions,
-      ).insert(row.copyWith(uuid: Value(_uuid.v4())));
+      final id = await into(sessions)
+          .insert(row.copyWith(uuid: Value(_uuid.v4())));
       return plan.copyWith(id: id);
     }
     await (update(sessions)..where((t) => t.id.equals(plan.id!))).write(row);
@@ -350,10 +348,9 @@ class AppDatabase extends _$AppDatabase {
     }
   }
 
-  Stream<String?> watchMeta(String key) =>
-      (select(syncMeta)..where((t) => t.key.equals(key)))
-          .watchSingleOrNull()
-          .map((r) => r?.value);
+  Stream<String?> watchMeta(String key) => (select(
+    syncMeta,
+  )..where((t) => t.key.equals(key))).watchSingleOrNull().map((r) => r?.value);
 
   Future<void> _touchSettings() async {
     await setMeta(_settingsMs, '${nowMs()}');
@@ -523,9 +520,8 @@ class AppDatabase extends _$AppDatabase {
   /// Wszystko jako „niewysłane" (np. po zalogowaniu na nowe konto).
   Future<void> markAllPending() => transaction(() async {
     await update(sessions).write(const SessionsCompanion(dirty: Value(true)));
-    await update(
-      shoppingChecks,
-    ).write(const ShoppingChecksCompanion(dirty: Value(true)));
+    await update(shoppingChecks)
+        .write(const ShoppingChecksCompanion(dirty: Value(true)));
     if ((await getMeta(_settingsMs) ?? '0') != '0') {
       await setMeta(_settingsDirty, '1');
     }

@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import '../data/database.dart';
+import '../data/sync.dart';
 import '../logic/models.dart';
 import 'cooking_timers.dart';
 
@@ -15,12 +16,16 @@ class AppScope extends InheritedWidget {
     required this.db,
     required this.catalog,
     required this.timers,
+    this.sync,
     required super.child,
   });
 
   final AppDatabase db;
   final Catalog catalog;
   final CookingTimers timers;
+
+  /// Synchronizacja z Supabase; `null`, gdy aplikację zbudowano bez niej.
+  final SyncController? sync;
 
   static AppScope of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<AppScope>();
@@ -30,5 +35,8 @@ class AppScope extends InheritedWidget {
 
   @override
   bool updateShouldNotify(AppScope old) =>
-      db != old.db || catalog != old.catalog || timers != old.timers;
+      db != old.db ||
+      catalog != old.catalog ||
+      timers != old.timers ||
+      sync != old.sync;
 }

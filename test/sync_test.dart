@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:drift/native.dart';
@@ -11,132 +10,7 @@ import 'package:mealprep/logic/scaling.dart';
 import 'package:mealprep/logic/session_plan.dart';
 import 'package:mealprep/logic/sync_merge.dart';
 
-/// Serwer w pamięci, który zachowuje się jak Supabase ze `schema.sql`:
-/// starsza wersja nie nadpisuje nowszej, każdy zapis dostaje `synced_at`.
-class FakeRemote implements SyncRemote {
-  RemoteSettings? settings;
-  final sessions = <String, RemoteSession>{};
-  final checks = <String, RemoteCheck>{};
-  var _clock = DateTime.utc(2026, 11, 10, 12);
-  final _listeners = <void Function()>[];
-  bool offline = false;
-
-  String _tick() =>
-      (_clock = _clock.add(const Duration(seconds: 1))).toIso8601String();
-
-  bool _newer(String? since, String? syncedAt) =>
-      since == null || DateTime.parse(syncedAt!).isAfter(DateTime.parse(since));
-
-  void _check() {
-    if (offline) throw const SocketException('Failed host lookup');
-  }
-
-  void _changed() {
-    for (final l in [..._listeners]) {
-      l();
-    }
-  }
-
-  @override
-  Future<RemoteSettings?> fetchSettings(String? since) async {
-    _check();
-    final s = settings;
-    return s != null && _newer(since, s.syncedAt) ? s : null;
-  }
-
-  @override
-  Future<List<RemoteSession>> fetchSessions(String? since) async {
-    _check();
-    return [
-      for (final s in sessions.values)
-        if (_newer(since, s.syncedAt)) s,
-    ];
-  }
-
-  @override
-  Future<List<RemoteCheck>> fetchChecks(String? since) async {
-    _check();
-    return [
-      for (final c in checks.values)
-        if (_newer(since, c.syncedAt)) c,
-    ];
-  }
-
-  @override
-  Future<void> pushSettings(RemoteSettings s) async {
-    _check();
-    if (settings != null && s.updatedMs <= settings!.updatedMs) return;
-    settings = RemoteSettings(
-      data: s.data,
-      updatedMs: s.updatedMs,
-      syncedAt: _tick(),
-    );
-    _changed();
-  }
-
-  @override
-  Future<void> pushSessions(List<RemoteSession> rows) async {
-    _check();
-    for (final r in rows) {
-      final old = sessions[r.uuid];
-      if (old != null && r.updatedMs <= old.updatedMs) continue;
-      sessions[r.uuid] = RemoteSession(
-        uuid: r.uuid,
-        data: r.data,
-        deleted: r.deleted,
-        updatedMs: r.updatedMs,
-        syncedAt: _tick(),
-      );
-    }
-    _changed();
-  }
-
-  @override
-  Future<void> pushChecks(List<RemoteCheck> rows) async {
-    _check();
-    for (final r in rows) {
-      final key = '${r.sessionUuid}/${r.productId}';
-      final old = checks[key];
-      if (old != null && r.updatedMs <= old.updatedMs) continue;
-      checks[key] = RemoteCheck(
-        sessionUuid: r.sessionUuid,
-        productId: r.productId,
-        checked: r.checked,
-        updatedMs: r.updatedMs,
-        syncedAt: _tick(),
-      );
-    }
-    _changed();
-  }
-
-  @override
-  void Function() listen(void Function() onChange) {
-    _listeners.add(onChange);
-    return () => _listeners.remove(onChange);
-  }
-}
-
-class FakeAuth implements SyncAuth {
-  @override
-  String? email;
-  final _changes = StreamController<void>.broadcast();
-
-  @override
-  Stream<void> get changes => _changes.stream;
-
-  @override
-  Future<void> signIn(String email, String password) async {
-    if (password != 'dobre') throw Exception('Invalid login credentials');
-    this.email = email;
-    _changes.add(null);
-  }
-
-  @override
-  Future<void> signOut() async {
-    email = null;
-    _changes.add(null);
-  }
-}
+import 'sync_fakes.dart';
 
 SessionPlan newPlan(DateTime day) =>
     SessionPlan.create(firstDay: day, dayCount: 3, slots: defaultMealSlots);
@@ -147,19 +21,19 @@ Future<void> tick() => Future<void>.delayed(const Duration(milliseconds: 2));
 
 void main() {
   group('zasady scalania', () {
-    test('nowsza wygrywa, równa zostaje lokalna, brak lokalnej = z serwera', () {
-      expect(remoteWins(localMs: 100, remoteMs: 200), isTrue);
-      expect(remoteWins(localMs: 200, remoteMs: 100), isFalse);
-      expect(remoteWins(localMs: 200, remoteMs: 200), isFalse);
-      expect(remoteWins(localMs: null, remoteMs: 0), isTrue);
-    });
+    test(
+      'nowsza wygrywa, równa zostaje lokalna, brak lokalnej = z serwera',
+      () {
+        expect(remoteWins(localMs: 100, remoteMs: 200), isTrue);
+        expect(remoteWins(localMs: 200, remoteMs: 100), isFalse);
+        expect(remoteWins(localMs: 200, remoteMs: 200), isFalse);
+        expect(remoteWins(localMs: null, remoteMs: 0), isTrue);
+      },
+    );
 
     test('kursor cofa się o minutę i wybiera nowszy czas', () {
       expect(pullSince(null), isNull);
-      expect(
-        pullSince('2026-11-10T12:00:00.000Z'),
-        '2026-11-10T11:59:00.000Z',
-      );
+      expect(pullSince('2026-11-10T12:00:00.000Z'), '2026-11-10T11:59:00.000Z');
       expect(
         laterCursor('2026-11-10T12:00:00+00:00', '2026-11-10T11:00:00Z'),
         '2026-11-10T12:00:00+00:00',
@@ -213,44 +87,50 @@ void main() {
       expect(server.settings, isNull);
     });
 
-    test('sesja, ustawienia i odhaczenia przechodzą na drugie urządzenie', () async {
-      await mac.saveSettings(
-        const Settings(target: Macros(kcal: 3200, p: 200, f: 90, c: 400)),
-      );
-      final s = await mac.saveSession(
-        newPlan(DateTime(2026, 11, 9)).withRecipe('Obiad', 'chili-con-carne'),
-      );
-      await mac.setChecked(s.id!, 'cebula', true);
-      await macSync.syncAll();
-      expect(await mac.watchPendingCount().first, 0);
+    test(
+      'sesja, ustawienia i odhaczenia przechodzą na drugie urządzenie',
+      () async {
+        await mac.saveSettings(
+          const Settings(target: Macros(kcal: 3200, p: 200, f: 90, c: 400)),
+        );
+        final s = await mac.saveSession(
+          newPlan(DateTime(2026, 11, 9)).withRecipe('Obiad', 'chili-con-carne'),
+        );
+        await mac.setChecked(s.id!, 'cebula', true);
+        await macSync.syncAll();
+        expect(await mac.watchPendingCount().first, 0);
 
-      expect(await phoneSync.syncAll(), isTrue); // ustawienia się zmieniły
-      expect((await phone.loadSettings()).target.kcal, 3200);
-      final sessions = await phone.loadSessions();
-      expect(sessions.single.recipes, {'Obiad': 'chili-con-carne'});
-      expect(await phone.watchChecks(sessions.single.id!).first, {'cebula'});
-      // Dane z serwera nie są „niewysłane".
-      expect(await phone.watchPendingCount().first, 0);
-    });
+        expect(await phoneSync.syncAll(), isTrue); // ustawienia się zmieniły
+        expect((await phone.loadSettings()).target.kcal, 3200);
+        final sessions = await phone.loadSessions();
+        expect(sessions.single.recipes, {'Obiad': 'chili-con-carne'});
+        expect(await phone.watchChecks(sessions.single.id!).first, {'cebula'});
+        // Dane z serwera nie są „niewysłane".
+        expect(await phone.watchPendingCount().first, 0);
+      },
+    );
 
-    test('konflikt: wygrywa nowsza zmiana, bez względu na kolejność wysyłki', () async {
-      final s = await mac.saveSession(newPlan(DateTime(2026, 11, 9)));
-      await macSync.syncAll();
-      await phoneSync.syncAll();
-      final onPhone = (await phone.loadSessions()).single;
+    test(
+      'konflikt: wygrywa nowsza zmiana, bez względu na kolejność wysyłki',
+      () async {
+        final s = await mac.saveSession(newPlan(DateTime(2026, 11, 9)));
+        await macSync.syncAll();
+        await phoneSync.syncAll();
+        final onPhone = (await phone.loadSessions()).single;
 
-      // Najpierw zmiana na Macu (starsza), potem na telefonie (nowsza)...
-      await mac.saveSession(s.withRecipe('Obiad', 'starsze'));
-      await tick();
-      await phone.saveSession(onPhone.withRecipe('Obiad', 'nowsze'));
-      // ...ale telefon wysyła pierwszy.
-      await phoneSync.syncAll();
-      await macSync.syncAll();
-      await phoneSync.syncAll();
+        // Najpierw zmiana na Macu (starsza), potem na telefonie (nowsza)...
+        await mac.saveSession(s.withRecipe('Obiad', 'starsze'));
+        await tick();
+        await phone.saveSession(onPhone.withRecipe('Obiad', 'nowsze'));
+        // ...ale telefon wysyła pierwszy.
+        await phoneSync.syncAll();
+        await macSync.syncAll();
+        await phoneSync.syncAll();
 
-      expect((await mac.loadSessions()).single.recipes['Obiad'], 'nowsze');
-      expect((await phone.loadSessions()).single.recipes['Obiad'], 'nowsze');
-    });
+        expect((await mac.loadSessions()).single.recipes['Obiad'], 'nowsze');
+        expect((await phone.loadSessions()).single.recipes['Obiad'], 'nowsze');
+      },
+    );
 
     test('nagrobek: usunięta sesja znika z drugiego urządzenia', () async {
       final s = await mac.saveSession(newPlan(DateTime(2026, 11, 9)));
@@ -324,7 +204,7 @@ void main() {
       );
       // Zegar serwera idzie dalej o więcej niż minutę.
       for (var i = 0; i < 70; i++) {
-        server._tick();
+        server.tick();
       }
       await mac.saveSession(newPlan(DateTime(2026, 11, 12)));
       await macSync.syncAll();
@@ -374,19 +254,22 @@ void main() {
       expect(sync.signedIn, isFalse);
     });
 
-    test('pierwsze logowanie wysyła istniejące dane, potem każdą zmianę', () async {
-      await db.saveSession(newPlan(DateTime(2026, 11, 9)));
-      expect(await sync.signIn('a@b.pl', 'dobre'), isNull);
-      await idle();
-      expect(server.sessions, hasLength(1));
-      expect(sync.lastSync, isNotNull);
+    test(
+      'pierwsze logowanie wysyła istniejące dane, potem każdą zmianę',
+      () async {
+        await db.saveSession(newPlan(DateTime(2026, 11, 9)));
+        expect(await sync.signIn('a@b.pl', 'dobre'), isNull);
+        await idle();
+        expect(server.sessions, hasLength(1));
+        expect(sync.lastSync, isNotNull);
 
-      await db.saveSession(newPlan(DateTime(2026, 11, 12)));
-      await idle();
-      await idle();
-      expect(server.sessions, hasLength(2));
-      expect(sync.pending, 0);
-    });
+        await db.saveSession(newPlan(DateTime(2026, 11, 12)));
+        await idle();
+        await idle();
+        expect(server.sessions, hasLength(2));
+        expect(sync.pending, 0);
+      },
+    );
 
     test('błąd sieci pokazuje komunikat', () async {
       server.offline = true;

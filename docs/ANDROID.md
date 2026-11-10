@@ -3,9 +3,10 @@
 ## Zbudowanie pliku APK (na Macu)
 
 ```bash
-flutter build apk --release --split-per-abi
+flutter build apk --release --split-per-abi --dart-define-from-file=supabase.json
 ```
 
+Flaga `--dart-define-from-file` wbudowuje dane projektu Supabase (synchronizacja); bez niej aplikacja działa tylko lokalnie.
 Gotowy plik dla telefonu: `build/app/outputs/flutter-apk/app-arm64-v8a-release.apk` (ok. 20 MB).
 `--split-per-abi` robi osobny plik dla każdego typu procesora. Prawie każdy współczesny telefon
 (w tym Redmi Note 10 Pro) ma `arm64-v8a`. Bez tej flagi powstaje jeden plik `app-release.apk`
@@ -39,7 +40,7 @@ flutter devices
 ```
 
 ```bash
-flutter run -d <id telefonu>
+flutter run -d <id telefonu> --dart-define-from-file=supabase.json
 ```
 
 ## Emulator
@@ -52,5 +53,5 @@ flutter emulators --launch Medium_Phone_API_37.0
 ```
 
 ```bash
-flutter run -d emulator-5554
+flutter run -d emulator-5554 --dart-define-from-file=supabase.json
 ```

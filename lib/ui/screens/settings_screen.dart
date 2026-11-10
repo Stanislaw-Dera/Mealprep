@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 
 import '../../logic/models.dart';
 import '../../logic/scaling.dart';
+import '../../data/sync.dart';
 import '../app_scope.dart';
+import '../widgets/sync_section.dart';
 
 /// Zakładka „Ustawienia": cele makro, dodatek na dzień treningowy
 /// i lista posiłków w dniu.
@@ -58,10 +60,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
+  SyncController? _sync;
+  int _syncedSettings = 0;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    final sync = AppScope.of(context).sync;
+    if (sync != _sync) {
+      _sync?.removeListener(_syncChanged);
+      _sync = sync?..addListener(_syncChanged);
+      _syncedSettings = sync?.settingsVersion ?? 0;
+    }
     if (_loading) _load();
+  }
+
+  /// Z innego urządzenia przyszły nowe ustawienia: pokaż je, o ile nie
+  /// edytujesz właśnie pól (wtedy zostają Twoje zmiany).
+  void _syncChanged() {
+    final v = _sync!.settingsVersion;
+    if (v == _syncedSettings) return;
+    _syncedSettings = v;
+    if (!_dirty) _load();
   }
 
   Future<void> _load() async {
@@ -107,6 +127,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   void dispose() {
+    _sync?.removeListener(_syncChanged);
     for (final c in _numberFields) {
       c.dispose();
     }
@@ -256,6 +277,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 32),
+                const Divider(),
+                const SizedBox(height: 16),
+                _sectionTitle(theme, 'Synchronizacja'),
+                SyncSection(sync: _sync),
               ],
             ),
           ),

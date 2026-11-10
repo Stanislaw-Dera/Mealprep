@@ -42,10 +42,10 @@ gdy aplikacja jest w tle (to by wymagało powiadomień, ewentualnie w Etapie 3).
 ### Po stronie użytkownika
 - [x] Konto i projekt na supabase.com (darmowy plan).
 - [x] Klucz publishable (w lokalnym `supabase.json`, poza gitem; wzór: `supabase.example.json`).
-- [ ] **Project URL** do `supabase.json` (`https://<id>.supabase.co`, w Project Settings → API).
+- [x] **Project URL** do `supabase.json` (`https://<id>.supabase.co`, w Project Settings → API).
 - [ ] Authentication → Users → *Add user* (e-mail i hasło).
-- [ ] Authentication → Sign In / Providers: wyłączyć *Allow new users to sign up*.
-- [ ] Wkleić SQL ze schematem (przygotuje Claude) w SQL Editor.
+- [x] Authentication → Sign In / Providers: wyłączyć *Allow new users to sign up* (sprawdzone: `disable_signup: true`).
+- [ ] Wkleić `supabase/schema.sql` w SQL Editor i uruchomić (Run).
 - Nigdy nie podawać Claude'owi klucza `service_role`/`secret` ani hasła do bazy.
 
 ### Założenia
@@ -72,12 +72,31 @@ gdy aplikacja jest w tle (to by wymagało powiadomień, ewentualnie w Etapie 3).
   (w sklepie odhaczenie z telefonu od razu widać na Macu) i na `sessions`.
 
 ### Do zrobienia
-- [ ] SQL: tabele, indeksy, RLS, włączony Realtime (plik `supabase/schema.sql` w repo, użytkownik wkleja w SQL Editor).
-- [ ] Migracja lokalnej bazy do v4: `sessions` dostają `uuid` (globalny identyfikator) i `deleted`; `shopping_checks`
+- [x] SQL: tabele, indeksy, RLS, włączony Realtime (plik `supabase/schema.sql` w repo, użytkownik wkleja w SQL Editor).
+- [x] Migracja lokalnej bazy do v4: `sessions` dostają `uuid` (globalny identyfikator) i `deleted`; `shopping_checks`
       dostają `checked` i `updated_at`; tabela kolejki zmian albo znaczniki „niewysłane”. Test migracji z v3.
-- [ ] Ekran logowania (e-mail + hasło) w Ustawieniach: stan „zalogowany jako…”, „Wyloguj”, „Synchronizuj teraz”,
+- [x] Ekran logowania (e-mail + hasło) w Ustawieniach: stan „zalogowany jako…”, „Wyloguj”, „Synchronizuj teraz”,
       czas ostatniej synchronizacji, błędy po polsku.
-- [ ] Moduł synchronizacji (`lib/data/sync.dart`): wysyłka, pobieranie, scalanie, Realtime. Logika scalania jako czysty
+- [x] Moduł synchronizacji (`lib/data/sync.dart`): wysyłka, pobieranie, scalanie, Realtime. Logika scalania jako czysty
       Dart z testami (bez sieci).
-- [ ] Pierwsze zalogowanie na urządzeniu z danymi: wysłać lokalne dane (Mac ma już cele i sesje).
-- [ ] Testy: scalanie konfliktów, nagrobki, migracja v3→v4; reszta testów nadal przechodzi.
+- [x] Pierwsze zalogowanie na urządzeniu z danymi: wysłać lokalne dane (Mac ma już cele i sesje).
+- [x] Testy: scalanie konfliktów, nagrobki, migracja v3→v4; reszta testów nadal przechodzi.
+
+### Jak to działa (zrobione)
+- `lib/logic/sync_merge.dart`: zasady scalania (nowsza zmiana wygrywa, kursor pobierania z minutowym zakładem).
+- `lib/data/database.dart` (schemat v4): sesje mają `uuid`, `deleted`, `dirty` i `updated_ms`; odhaczenia mają `checked`,
+  `dirty`, `updated_ms`; tabela `sync_meta` trzyma czas zmiany ustawień, kursory i e-mail ostatniego konta.
+  Zapis przez użytkownika ustawia `dirty`, zapis danych z serwera nie.
+- `lib/data/sync.dart`: `SyncEngine` (wysyłka niewysłanych, pobranie zmian po `synced_at`) i `SyncController`
+  (po zalogowaniu, sekundę po każdej lokalnej zmianie, po zdarzeniu Realtime, po powrocie do aplikacji; po błędzie ponowna
+  próba za 30 s). `lib/data/supabase_sync.dart`: implementacja na Supabase.
+- Serwer też pilnuje zasady „nowsza wygrywa" (wyzwalacz w `supabase/schema.sql`) i sam ustawia `synced_at`.
+- Pierwsze logowanie danym kontem na urządzeniu: wszystkie lokalne dane idą do wysłania, pobierane jest wszystko.
+  Domyślne cele nowej instalacji mają czas 0, więc nie nadpiszą prawdziwych celów z Maca.
+- Testy: `test/sync_test.dart` (dwa urządzenia i serwer w pamięci: `test/sync_fakes.dart`), `test/sync_section_test.dart`,
+  migracja v3→v4 w `test/database_test.dart`.
+
+### Do sprawdzenia przez użytkownika
+- [ ] Po wklejeniu SQL i dodaniu użytkownika: zalogować się na Macu (Ustawienia → Synchronizacja), potem na emulatorze/telefonie;
+      sesja i cele z Maca mają się pojawić na telefonie, odhaczenie na liście zakupów ma być widać na drugim urządzeniu.
+- APK z synchronizacją: `flutter build apk --release --dart-define-from-file=supabase.json`.

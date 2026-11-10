@@ -115,12 +115,10 @@ class SupabaseRemote implements SyncRemote {
   ];
 
   @override
-  Future<void> pushSettings(RemoteSettings s) =>
-      client.from('settings').upsert({
-        'user_id': _userId,
-        'data': s.data,
-        'updated_at': isoFromMs(s.updatedMs),
-      }, onConflict: 'user_id');
+  Future<void> pushSettings(RemoteSettings s) => client.from('settings').upsert(
+    {'user_id': _userId, 'data': s.data, 'updated_at': isoFromMs(s.updatedMs)},
+    onConflict: 'user_id',
+  );
 
   @override
   Future<void> pushSessions(List<RemoteSession> rows) =>
