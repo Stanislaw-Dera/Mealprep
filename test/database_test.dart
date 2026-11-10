@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:drift/native.dart';
@@ -118,6 +119,68 @@ void main() {
     expect(await old.watchChecks(1).first, {'ryz-bialy'});
   });
 
+  test('migracja z wersji 3 do 4 zachowuje sesje i odhaczenia', () async {
+    final dir = Directory.systemTemp.createTempSync('mealprep_');
+    addTearDown(() => dir.deleteSync(recursive: true));
+    final file = File('${dir.path}/v3.sqlite');
+    final plan = SessionPlan.create(
+      firstDay: DateTime(2026, 11, 9),
+      dayCount: 3,
+      slots: defaultMealSlots,
+    ).withRecipe('Obiad', 'chili-con-carne');
+    final data = jsonEncode(plan.toJson()).replaceAll("'", "''");
+
+    // Schemat dokładnie jak w bazie z wersji 3 aplikacji (Etap 1).
+    final old = AppDatabase(
+      NativeDatabase(
+        file,
+        setup: (raw) {
+          if (raw.userVersion != 0) return;
+          raw.execute("""
+            CREATE TABLE "goals" ("id" INTEGER NOT NULL DEFAULT 1, "kcal" REAL NOT NULL,
+              "protein" REAL NOT NULL, "fat" REAL NOT NULL, "carbs" REAL NOT NULL,
+              "training_extra_kcal" REAL NOT NULL, "training_extra_from" TEXT NOT NULL,
+              PRIMARY KEY ("id"));
+            CREATE TABLE "meal_slots" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+              "name" TEXT NOT NULL, "position" INTEGER NOT NULL,
+              "prep" INTEGER NOT NULL CHECK ("prep" IN (0, 1)));
+            CREATE TABLE "sessions" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+              "first_day" INTEGER NOT NULL, "data" TEXT NOT NULL,
+              "updated_at" INTEGER NOT NULL);
+            CREATE TABLE "shopping_checks" ("session_id" INTEGER NOT NULL,
+              "product_id" TEXT NOT NULL, "checked_at" INTEGER NOT NULL,
+              PRIMARY KEY ("session_id", "product_id"));
+            INSERT INTO goals VALUES (1, 3100, 190, 95, 375, 300, 'c');
+            INSERT INTO meal_slots (name, position, prep) VALUES ('Obiad', 0, 1);
+            INSERT INTO sessions VALUES (1, 1794700800, '$data', 1794700900);
+            INSERT INTO sessions VALUES (2, 1794960000, '$data', 1794960100);
+            INSERT INTO shopping_checks VALUES (1, 'cebula', 1794700950);
+          """);
+          raw.userVersion = 3;
+        },
+      ),
+    );
+    addTearDown(old.close);
+
+    final sessions = await old.loadSessions();
+    expect(sessions.map((s) => s.id), [2, 1]);
+    expect(sessions.last.recipes, {'Obiad': 'chili-con-carne'});
+    expect(await old.watchChecks(1).first, {'cebula'});
+    expect((await old.loadSettings()).target.kcal, 3100);
+
+    // Każda sesja ma własny uuid, czasy przeszły na milisekundy,
+    // a całe istniejące dane czekają na pierwsze wysłanie.
+    final rows = await old.select(old.sessions).get();
+    expect(rows.map((r) => r.uuid).toSet(), hasLength(2));
+    expect(rows.every((r) => r.uuid.length == 36 && r.dirty), isTrue);
+    expect(rows.first.updatedMs, 1794700900000);
+    final check = await old.select(old.shoppingChecks).getSingle();
+    expect(check.checked, isTrue);
+    expect(check.updatedMs, 1794700950000);
+    expect(await old.pendingSettings(), isNotNull);
+    expect(await old.watchPendingCount().first, 4);
+  });
+
   test('odhaczanie zakupów i czyszczenie przy usunięciu sesji', () async {
     final a = await db.saveSession(
       SessionPlan.create(
@@ -146,6 +209,9 @@ void main() {
     expect(await db.watchChecks(b.id!).first, isEmpty);
 
     await db.deleteSession(a.id!);
-    expect(await db.select(db.shoppingChecks).get(), isEmpty);
+    final left = await db.select(db.shoppingChecks).get();
+    // Zostaje tylko odznaczony wiersz sesji b (odznaczenie też się synchronizuje).
+    expect(left.map((r) => (r.sessionId, r.checked)), [(b.id!, false)]);
+    expect(await db.loadSessions(), hasLength(1)); // a jest nagrobkiem
   });
 }

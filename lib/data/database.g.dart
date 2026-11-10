@@ -775,6 +775,15 @@ class $SessionsTable extends Sessions
       'PRIMARY KEY AUTOINCREMENT',
     ),
   );
+  static const VerificationMeta _uuidMeta = const VerificationMeta('uuid');
+  @override
+  late final GeneratedColumn<String> uuid = GeneratedColumn<String>(
+    'uuid',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _firstDayMeta = const VerificationMeta(
     'firstDay',
   );
@@ -795,19 +804,55 @@ class $SessionsTable extends Sessions
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
-    'updatedAt',
+  static const VerificationMeta _updatedMsMeta = const VerificationMeta(
+    'updatedMs',
   );
   @override
-  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-    'updated_at',
+  late final GeneratedColumn<int> updatedMs = GeneratedColumn<int>(
+    'updated_ms',
     aliasedName,
     false,
-    type: DriftSqlType.dateTime,
+    type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _deletedMeta = const VerificationMeta(
+    'deleted',
+  );
   @override
-  List<GeneratedColumn> get $columns => [id, firstDay, data, updatedAt];
+  late final GeneratedColumn<bool> deleted = GeneratedColumn<bool>(
+    'deleted',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("deleted" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _dirtyMeta = const VerificationMeta('dirty');
+  @override
+  late final GeneratedColumn<bool> dirty = GeneratedColumn<bool>(
+    'dirty',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("dirty" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    uuid,
+    firstDay,
+    data,
+    updatedMs,
+    deleted,
+    dirty,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -822,6 +867,14 @@ class $SessionsTable extends Sessions
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('uuid')) {
+      context.handle(
+        _uuidMeta,
+        uuid.isAcceptableOrUnknown(data['uuid']!, _uuidMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_uuidMeta);
     }
     if (data.containsKey('first_day')) {
       context.handle(
@@ -839,13 +892,25 @@ class $SessionsTable extends Sessions
     } else if (isInserting) {
       context.missing(_dataMeta);
     }
-    if (data.containsKey('updated_at')) {
+    if (data.containsKey('updated_ms')) {
       context.handle(
-        _updatedAtMeta,
-        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+        _updatedMsMeta,
+        updatedMs.isAcceptableOrUnknown(data['updated_ms']!, _updatedMsMeta),
       );
     } else if (isInserting) {
-      context.missing(_updatedAtMeta);
+      context.missing(_updatedMsMeta);
+    }
+    if (data.containsKey('deleted')) {
+      context.handle(
+        _deletedMeta,
+        deleted.isAcceptableOrUnknown(data['deleted']!, _deletedMeta),
+      );
+    }
+    if (data.containsKey('dirty')) {
+      context.handle(
+        _dirtyMeta,
+        dirty.isAcceptableOrUnknown(data['dirty']!, _dirtyMeta),
+      );
     }
     return context;
   }
@@ -860,6 +925,10 @@ class $SessionsTable extends Sessions
         DriftSqlType.int,
         data['${effectivePrefix}id'],
       )!,
+      uuid: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}uuid'],
+      )!,
       firstDay: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}first_day'],
@@ -868,9 +937,17 @@ class $SessionsTable extends Sessions
         DriftSqlType.string,
         data['${effectivePrefix}data'],
       )!,
-      updatedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}updated_at'],
+      updatedMs: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}updated_ms'],
+      )!,
+      deleted: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}deleted'],
+      )!,
+      dirty: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}dirty'],
       )!,
     );
   }
@@ -883,31 +960,50 @@ class $SessionsTable extends Sessions
 
 class SessionRow extends DataClass implements Insertable<SessionRow> {
   final int id;
+  final String uuid;
   final DateTime firstDay;
   final String data;
-  final DateTime updatedAt;
+
+  /// Czas ostatniej zmiany, milisekundy UTC (do scalania przy synchronizacji).
+  final int updatedMs;
+
+  /// „Nagrobek": sesja usunięta, ale wiersz zostaje, żeby drugie urządzenie
+  /// dowiedziało się o usunięciu.
+  final bool deleted;
+
+  /// Zmiana jeszcze niewysłana do Supabase.
+  final bool dirty;
   const SessionRow({
     required this.id,
+    required this.uuid,
     required this.firstDay,
     required this.data,
-    required this.updatedAt,
+    required this.updatedMs,
+    required this.deleted,
+    required this.dirty,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
+    map['uuid'] = Variable<String>(uuid);
     map['first_day'] = Variable<DateTime>(firstDay);
     map['data'] = Variable<String>(data);
-    map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['updated_ms'] = Variable<int>(updatedMs);
+    map['deleted'] = Variable<bool>(deleted);
+    map['dirty'] = Variable<bool>(dirty);
     return map;
   }
 
   SessionsCompanion toCompanion(bool nullToAbsent) {
     return SessionsCompanion(
       id: Value(id),
+      uuid: Value(uuid),
       firstDay: Value(firstDay),
       data: Value(data),
-      updatedAt: Value(updatedAt),
+      updatedMs: Value(updatedMs),
+      deleted: Value(deleted),
+      dirty: Value(dirty),
     );
   }
 
@@ -918,9 +1014,12 @@ class SessionRow extends DataClass implements Insertable<SessionRow> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return SessionRow(
       id: serializer.fromJson<int>(json['id']),
+      uuid: serializer.fromJson<String>(json['uuid']),
       firstDay: serializer.fromJson<DateTime>(json['firstDay']),
       data: serializer.fromJson<String>(json['data']),
-      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      updatedMs: serializer.fromJson<int>(json['updatedMs']),
+      deleted: serializer.fromJson<bool>(json['deleted']),
+      dirty: serializer.fromJson<bool>(json['dirty']),
     );
   }
   @override
@@ -928,29 +1027,41 @@ class SessionRow extends DataClass implements Insertable<SessionRow> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'uuid': serializer.toJson<String>(uuid),
       'firstDay': serializer.toJson<DateTime>(firstDay),
       'data': serializer.toJson<String>(data),
-      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'updatedMs': serializer.toJson<int>(updatedMs),
+      'deleted': serializer.toJson<bool>(deleted),
+      'dirty': serializer.toJson<bool>(dirty),
     };
   }
 
   SessionRow copyWith({
     int? id,
+    String? uuid,
     DateTime? firstDay,
     String? data,
-    DateTime? updatedAt,
+    int? updatedMs,
+    bool? deleted,
+    bool? dirty,
   }) => SessionRow(
     id: id ?? this.id,
+    uuid: uuid ?? this.uuid,
     firstDay: firstDay ?? this.firstDay,
     data: data ?? this.data,
-    updatedAt: updatedAt ?? this.updatedAt,
+    updatedMs: updatedMs ?? this.updatedMs,
+    deleted: deleted ?? this.deleted,
+    dirty: dirty ?? this.dirty,
   );
   SessionRow copyWithCompanion(SessionsCompanion data) {
     return SessionRow(
       id: data.id.present ? data.id.value : this.id,
+      uuid: data.uuid.present ? data.uuid.value : this.uuid,
       firstDay: data.firstDay.present ? data.firstDay.value : this.firstDay,
       data: data.data.present ? data.data.value : this.data,
-      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      updatedMs: data.updatedMs.present ? data.updatedMs.value : this.updatedMs,
+      deleted: data.deleted.present ? data.deleted.value : this.deleted,
+      dirty: data.dirty.present ? data.dirty.value : this.dirty,
     );
   }
 
@@ -958,69 +1069,98 @@ class SessionRow extends DataClass implements Insertable<SessionRow> {
   String toString() {
     return (StringBuffer('SessionRow(')
           ..write('id: $id, ')
+          ..write('uuid: $uuid, ')
           ..write('firstDay: $firstDay, ')
           ..write('data: $data, ')
-          ..write('updatedAt: $updatedAt')
+          ..write('updatedMs: $updatedMs, ')
+          ..write('deleted: $deleted, ')
+          ..write('dirty: $dirty')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, firstDay, data, updatedAt);
+  int get hashCode =>
+      Object.hash(id, uuid, firstDay, data, updatedMs, deleted, dirty);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is SessionRow &&
           other.id == this.id &&
+          other.uuid == this.uuid &&
           other.firstDay == this.firstDay &&
           other.data == this.data &&
-          other.updatedAt == this.updatedAt);
+          other.updatedMs == this.updatedMs &&
+          other.deleted == this.deleted &&
+          other.dirty == this.dirty);
 }
 
 class SessionsCompanion extends UpdateCompanion<SessionRow> {
   final Value<int> id;
+  final Value<String> uuid;
   final Value<DateTime> firstDay;
   final Value<String> data;
-  final Value<DateTime> updatedAt;
+  final Value<int> updatedMs;
+  final Value<bool> deleted;
+  final Value<bool> dirty;
   const SessionsCompanion({
     this.id = const Value.absent(),
+    this.uuid = const Value.absent(),
     this.firstDay = const Value.absent(),
     this.data = const Value.absent(),
-    this.updatedAt = const Value.absent(),
+    this.updatedMs = const Value.absent(),
+    this.deleted = const Value.absent(),
+    this.dirty = const Value.absent(),
   });
   SessionsCompanion.insert({
     this.id = const Value.absent(),
+    required String uuid,
     required DateTime firstDay,
     required String data,
-    required DateTime updatedAt,
-  }) : firstDay = Value(firstDay),
+    required int updatedMs,
+    this.deleted = const Value.absent(),
+    this.dirty = const Value.absent(),
+  }) : uuid = Value(uuid),
+       firstDay = Value(firstDay),
        data = Value(data),
-       updatedAt = Value(updatedAt);
+       updatedMs = Value(updatedMs);
   static Insertable<SessionRow> custom({
     Expression<int>? id,
+    Expression<String>? uuid,
     Expression<DateTime>? firstDay,
     Expression<String>? data,
-    Expression<DateTime>? updatedAt,
+    Expression<int>? updatedMs,
+    Expression<bool>? deleted,
+    Expression<bool>? dirty,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (uuid != null) 'uuid': uuid,
       if (firstDay != null) 'first_day': firstDay,
       if (data != null) 'data': data,
-      if (updatedAt != null) 'updated_at': updatedAt,
+      if (updatedMs != null) 'updated_ms': updatedMs,
+      if (deleted != null) 'deleted': deleted,
+      if (dirty != null) 'dirty': dirty,
     });
   }
 
   SessionsCompanion copyWith({
     Value<int>? id,
+    Value<String>? uuid,
     Value<DateTime>? firstDay,
     Value<String>? data,
-    Value<DateTime>? updatedAt,
+    Value<int>? updatedMs,
+    Value<bool>? deleted,
+    Value<bool>? dirty,
   }) {
     return SessionsCompanion(
       id: id ?? this.id,
+      uuid: uuid ?? this.uuid,
       firstDay: firstDay ?? this.firstDay,
       data: data ?? this.data,
-      updatedAt: updatedAt ?? this.updatedAt,
+      updatedMs: updatedMs ?? this.updatedMs,
+      deleted: deleted ?? this.deleted,
+      dirty: dirty ?? this.dirty,
     );
   }
 
@@ -1030,14 +1170,23 @@ class SessionsCompanion extends UpdateCompanion<SessionRow> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
+    if (uuid.present) {
+      map['uuid'] = Variable<String>(uuid.value);
+    }
     if (firstDay.present) {
       map['first_day'] = Variable<DateTime>(firstDay.value);
     }
     if (data.present) {
       map['data'] = Variable<String>(data.value);
     }
-    if (updatedAt.present) {
-      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    if (updatedMs.present) {
+      map['updated_ms'] = Variable<int>(updatedMs.value);
+    }
+    if (deleted.present) {
+      map['deleted'] = Variable<bool>(deleted.value);
+    }
+    if (dirty.present) {
+      map['dirty'] = Variable<bool>(dirty.value);
     }
     return map;
   }
@@ -1046,9 +1195,12 @@ class SessionsCompanion extends UpdateCompanion<SessionRow> {
   String toString() {
     return (StringBuffer('SessionsCompanion(')
           ..write('id: $id, ')
+          ..write('uuid: $uuid, ')
           ..write('firstDay: $firstDay, ')
           ..write('data: $data, ')
-          ..write('updatedAt: $updatedAt')
+          ..write('updatedMs: $updatedMs, ')
+          ..write('deleted: $deleted, ')
+          ..write('dirty: $dirty')
           ..write(')'))
         .toString();
   }
@@ -1082,19 +1234,53 @@ class $ShoppingChecksTable extends ShoppingChecks
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _checkedAtMeta = const VerificationMeta(
-    'checkedAt',
+  static const VerificationMeta _checkedMeta = const VerificationMeta(
+    'checked',
   );
   @override
-  late final GeneratedColumn<DateTime> checkedAt = GeneratedColumn<DateTime>(
-    'checked_at',
+  late final GeneratedColumn<bool> checked = GeneratedColumn<bool>(
+    'checked',
     aliasedName,
     false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("checked" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _updatedMsMeta = const VerificationMeta(
+    'updatedMs',
   );
   @override
-  List<GeneratedColumn> get $columns => [sessionId, productId, checkedAt];
+  late final GeneratedColumn<int> updatedMs = GeneratedColumn<int>(
+    'updated_ms',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _dirtyMeta = const VerificationMeta('dirty');
+  @override
+  late final GeneratedColumn<bool> dirty = GeneratedColumn<bool>(
+    'dirty',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("dirty" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    sessionId,
+    productId,
+    checked,
+    updatedMs,
+    dirty,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1123,13 +1309,25 @@ class $ShoppingChecksTable extends ShoppingChecks
     } else if (isInserting) {
       context.missing(_productIdMeta);
     }
-    if (data.containsKey('checked_at')) {
+    if (data.containsKey('checked')) {
       context.handle(
-        _checkedAtMeta,
-        checkedAt.isAcceptableOrUnknown(data['checked_at']!, _checkedAtMeta),
+        _checkedMeta,
+        checked.isAcceptableOrUnknown(data['checked']!, _checkedMeta),
+      );
+    }
+    if (data.containsKey('updated_ms')) {
+      context.handle(
+        _updatedMsMeta,
+        updatedMs.isAcceptableOrUnknown(data['updated_ms']!, _updatedMsMeta),
       );
     } else if (isInserting) {
-      context.missing(_checkedAtMeta);
+      context.missing(_updatedMsMeta);
+    }
+    if (data.containsKey('dirty')) {
+      context.handle(
+        _dirtyMeta,
+        dirty.isAcceptableOrUnknown(data['dirty']!, _dirtyMeta),
+      );
     }
     return context;
   }
@@ -1148,9 +1346,17 @@ class $ShoppingChecksTable extends ShoppingChecks
         DriftSqlType.string,
         data['${effectivePrefix}product_id'],
       )!,
-      checkedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}checked_at'],
+      checked: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}checked'],
+      )!,
+      updatedMs: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}updated_ms'],
+      )!,
+      dirty: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}dirty'],
       )!,
     );
   }
@@ -1165,18 +1371,24 @@ class ShoppingCheckRow extends DataClass
     implements Insertable<ShoppingCheckRow> {
   final int sessionId;
   final String productId;
-  final DateTime checkedAt;
+  final bool checked;
+  final int updatedMs;
+  final bool dirty;
   const ShoppingCheckRow({
     required this.sessionId,
     required this.productId,
-    required this.checkedAt,
+    required this.checked,
+    required this.updatedMs,
+    required this.dirty,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['session_id'] = Variable<int>(sessionId);
     map['product_id'] = Variable<String>(productId);
-    map['checked_at'] = Variable<DateTime>(checkedAt);
+    map['checked'] = Variable<bool>(checked);
+    map['updated_ms'] = Variable<int>(updatedMs);
+    map['dirty'] = Variable<bool>(dirty);
     return map;
   }
 
@@ -1184,7 +1396,9 @@ class ShoppingCheckRow extends DataClass
     return ShoppingChecksCompanion(
       sessionId: Value(sessionId),
       productId: Value(productId),
-      checkedAt: Value(checkedAt),
+      checked: Value(checked),
+      updatedMs: Value(updatedMs),
+      dirty: Value(dirty),
     );
   }
 
@@ -1196,7 +1410,9 @@ class ShoppingCheckRow extends DataClass
     return ShoppingCheckRow(
       sessionId: serializer.fromJson<int>(json['sessionId']),
       productId: serializer.fromJson<String>(json['productId']),
-      checkedAt: serializer.fromJson<DateTime>(json['checkedAt']),
+      checked: serializer.fromJson<bool>(json['checked']),
+      updatedMs: serializer.fromJson<int>(json['updatedMs']),
+      dirty: serializer.fromJson<bool>(json['dirty']),
     );
   }
   @override
@@ -1205,24 +1421,32 @@ class ShoppingCheckRow extends DataClass
     return <String, dynamic>{
       'sessionId': serializer.toJson<int>(sessionId),
       'productId': serializer.toJson<String>(productId),
-      'checkedAt': serializer.toJson<DateTime>(checkedAt),
+      'checked': serializer.toJson<bool>(checked),
+      'updatedMs': serializer.toJson<int>(updatedMs),
+      'dirty': serializer.toJson<bool>(dirty),
     };
   }
 
   ShoppingCheckRow copyWith({
     int? sessionId,
     String? productId,
-    DateTime? checkedAt,
+    bool? checked,
+    int? updatedMs,
+    bool? dirty,
   }) => ShoppingCheckRow(
     sessionId: sessionId ?? this.sessionId,
     productId: productId ?? this.productId,
-    checkedAt: checkedAt ?? this.checkedAt,
+    checked: checked ?? this.checked,
+    updatedMs: updatedMs ?? this.updatedMs,
+    dirty: dirty ?? this.dirty,
   );
   ShoppingCheckRow copyWithCompanion(ShoppingChecksCompanion data) {
     return ShoppingCheckRow(
       sessionId: data.sessionId.present ? data.sessionId.value : this.sessionId,
       productId: data.productId.present ? data.productId.value : this.productId,
-      checkedAt: data.checkedAt.present ? data.checkedAt.value : this.checkedAt,
+      checked: data.checked.present ? data.checked.value : this.checked,
+      updatedMs: data.updatedMs.present ? data.updatedMs.value : this.updatedMs,
+      dirty: data.dirty.present ? data.dirty.value : this.dirty,
     );
   }
 
@@ -1231,51 +1455,66 @@ class ShoppingCheckRow extends DataClass
     return (StringBuffer('ShoppingCheckRow(')
           ..write('sessionId: $sessionId, ')
           ..write('productId: $productId, ')
-          ..write('checkedAt: $checkedAt')
+          ..write('checked: $checked, ')
+          ..write('updatedMs: $updatedMs, ')
+          ..write('dirty: $dirty')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(sessionId, productId, checkedAt);
+  int get hashCode =>
+      Object.hash(sessionId, productId, checked, updatedMs, dirty);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ShoppingCheckRow &&
           other.sessionId == this.sessionId &&
           other.productId == this.productId &&
-          other.checkedAt == this.checkedAt);
+          other.checked == this.checked &&
+          other.updatedMs == this.updatedMs &&
+          other.dirty == this.dirty);
 }
 
 class ShoppingChecksCompanion extends UpdateCompanion<ShoppingCheckRow> {
   final Value<int> sessionId;
   final Value<String> productId;
-  final Value<DateTime> checkedAt;
+  final Value<bool> checked;
+  final Value<int> updatedMs;
+  final Value<bool> dirty;
   final Value<int> rowid;
   const ShoppingChecksCompanion({
     this.sessionId = const Value.absent(),
     this.productId = const Value.absent(),
-    this.checkedAt = const Value.absent(),
+    this.checked = const Value.absent(),
+    this.updatedMs = const Value.absent(),
+    this.dirty = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   ShoppingChecksCompanion.insert({
     required int sessionId,
     required String productId,
-    required DateTime checkedAt,
+    this.checked = const Value.absent(),
+    required int updatedMs,
+    this.dirty = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : sessionId = Value(sessionId),
        productId = Value(productId),
-       checkedAt = Value(checkedAt);
+       updatedMs = Value(updatedMs);
   static Insertable<ShoppingCheckRow> custom({
     Expression<int>? sessionId,
     Expression<String>? productId,
-    Expression<DateTime>? checkedAt,
+    Expression<bool>? checked,
+    Expression<int>? updatedMs,
+    Expression<bool>? dirty,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (sessionId != null) 'session_id': sessionId,
       if (productId != null) 'product_id': productId,
-      if (checkedAt != null) 'checked_at': checkedAt,
+      if (checked != null) 'checked': checked,
+      if (updatedMs != null) 'updated_ms': updatedMs,
+      if (dirty != null) 'dirty': dirty,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1283,13 +1522,17 @@ class ShoppingChecksCompanion extends UpdateCompanion<ShoppingCheckRow> {
   ShoppingChecksCompanion copyWith({
     Value<int>? sessionId,
     Value<String>? productId,
-    Value<DateTime>? checkedAt,
+    Value<bool>? checked,
+    Value<int>? updatedMs,
+    Value<bool>? dirty,
     Value<int>? rowid,
   }) {
     return ShoppingChecksCompanion(
       sessionId: sessionId ?? this.sessionId,
       productId: productId ?? this.productId,
-      checkedAt: checkedAt ?? this.checkedAt,
+      checked: checked ?? this.checked,
+      updatedMs: updatedMs ?? this.updatedMs,
+      dirty: dirty ?? this.dirty,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1303,8 +1546,14 @@ class ShoppingChecksCompanion extends UpdateCompanion<ShoppingCheckRow> {
     if (productId.present) {
       map['product_id'] = Variable<String>(productId.value);
     }
-    if (checkedAt.present) {
-      map['checked_at'] = Variable<DateTime>(checkedAt.value);
+    if (checked.present) {
+      map['checked'] = Variable<bool>(checked.value);
+    }
+    if (updatedMs.present) {
+      map['updated_ms'] = Variable<int>(updatedMs.value);
+    }
+    if (dirty.present) {
+      map['dirty'] = Variable<bool>(dirty.value);
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -1317,7 +1566,217 @@ class ShoppingChecksCompanion extends UpdateCompanion<ShoppingCheckRow> {
     return (StringBuffer('ShoppingChecksCompanion(')
           ..write('sessionId: $sessionId, ')
           ..write('productId: $productId, ')
-          ..write('checkedAt: $checkedAt, ')
+          ..write('checked: $checked, ')
+          ..write('updatedMs: $updatedMs, ')
+          ..write('dirty: $dirty, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $SyncMetaTable extends SyncMeta
+    with TableInfo<$SyncMetaTable, SyncMetaRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SyncMetaTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _keyMeta = const VerificationMeta('key');
+  @override
+  late final GeneratedColumn<String> key = GeneratedColumn<String>(
+    'key',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _valueMeta = const VerificationMeta('value');
+  @override
+  late final GeneratedColumn<String> value = GeneratedColumn<String>(
+    'value',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [key, value];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'sync_meta';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SyncMetaRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('key')) {
+      context.handle(
+        _keyMeta,
+        key.isAcceptableOrUnknown(data['key']!, _keyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_keyMeta);
+    }
+    if (data.containsKey('value')) {
+      context.handle(
+        _valueMeta,
+        value.isAcceptableOrUnknown(data['value']!, _valueMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_valueMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {key};
+  @override
+  SyncMetaRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SyncMetaRow(
+      key: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}key'],
+      )!,
+      value: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}value'],
+      )!,
+    );
+  }
+
+  @override
+  $SyncMetaTable createAlias(String alias) {
+    return $SyncMetaTable(attachedDatabase, alias);
+  }
+}
+
+class SyncMetaRow extends DataClass implements Insertable<SyncMetaRow> {
+  final String key;
+  final String value;
+  const SyncMetaRow({required this.key, required this.value});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['key'] = Variable<String>(key);
+    map['value'] = Variable<String>(value);
+    return map;
+  }
+
+  SyncMetaCompanion toCompanion(bool nullToAbsent) {
+    return SyncMetaCompanion(key: Value(key), value: Value(value));
+  }
+
+  factory SyncMetaRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SyncMetaRow(
+      key: serializer.fromJson<String>(json['key']),
+      value: serializer.fromJson<String>(json['value']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'key': serializer.toJson<String>(key),
+      'value': serializer.toJson<String>(value),
+    };
+  }
+
+  SyncMetaRow copyWith({String? key, String? value}) =>
+      SyncMetaRow(key: key ?? this.key, value: value ?? this.value);
+  SyncMetaRow copyWithCompanion(SyncMetaCompanion data) {
+    return SyncMetaRow(
+      key: data.key.present ? data.key.value : this.key,
+      value: data.value.present ? data.value.value : this.value,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SyncMetaRow(')
+          ..write('key: $key, ')
+          ..write('value: $value')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(key, value);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SyncMetaRow &&
+          other.key == this.key &&
+          other.value == this.value);
+}
+
+class SyncMetaCompanion extends UpdateCompanion<SyncMetaRow> {
+  final Value<String> key;
+  final Value<String> value;
+  final Value<int> rowid;
+  const SyncMetaCompanion({
+    this.key = const Value.absent(),
+    this.value = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SyncMetaCompanion.insert({
+    required String key,
+    required String value,
+    this.rowid = const Value.absent(),
+  }) : key = Value(key),
+       value = Value(value);
+  static Insertable<SyncMetaRow> custom({
+    Expression<String>? key,
+    Expression<String>? value,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (key != null) 'key': key,
+      if (value != null) 'value': value,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SyncMetaCompanion copyWith({
+    Value<String>? key,
+    Value<String>? value,
+    Value<int>? rowid,
+  }) {
+    return SyncMetaCompanion(
+      key: key ?? this.key,
+      value: value ?? this.value,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (key.present) {
+      map['key'] = Variable<String>(key.value);
+    }
+    if (value.present) {
+      map['value'] = Variable<String>(value.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SyncMetaCompanion(')
+          ..write('key: $key, ')
+          ..write('value: $value, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -1331,6 +1790,11 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $MealSlotsTable mealSlots = $MealSlotsTable(this);
   late final $SessionsTable sessions = $SessionsTable(this);
   late final $ShoppingChecksTable shoppingChecks = $ShoppingChecksTable(this);
+  late final $SyncMetaTable syncMeta = $SyncMetaTable(this);
+  late final Index sessionsUuid = Index(
+    'sessions_uuid',
+    'CREATE UNIQUE INDEX sessions_uuid ON sessions (uuid)',
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1340,6 +1804,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     mealSlots,
     sessions,
     shoppingChecks,
+    syncMeta,
+    sessionsUuid,
   ];
 }
 
@@ -1763,15 +2229,21 @@ typedef $$MealSlotsTableProcessedTableManager =
     >;
 typedef $$SessionsTableCreateCompanionBuilder = SessionsCompanion Function({
   Value<int> id,
+  required String uuid,
   required DateTime firstDay,
   required String data,
-  required DateTime updatedAt,
+  required int updatedMs,
+  Value<bool> deleted,
+  Value<bool> dirty,
 });
 typedef $$SessionsTableUpdateCompanionBuilder = SessionsCompanion Function({
   Value<int> id,
+  Value<String> uuid,
   Value<DateTime> firstDay,
   Value<String> data,
-  Value<DateTime> updatedAt,
+  Value<int> updatedMs,
+  Value<bool> deleted,
+  Value<bool> dirty,
 });
 
 class $$SessionsTableFilterComposer
@@ -1788,6 +2260,11 @@ class $$SessionsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<String> get uuid => $composableBuilder(
+    column: $table.uuid,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<DateTime> get firstDay => $composableBuilder(
     column: $table.firstDay,
     builder: (column) => ColumnFilters(column),
@@ -1798,8 +2275,18 @@ class $$SessionsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
+  ColumnFilters<int> get updatedMs => $composableBuilder(
+    column: $table.updatedMs,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get deleted => $composableBuilder(
+    column: $table.deleted,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get dirty => $composableBuilder(
+    column: $table.dirty,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -1818,6 +2305,11 @@ class $$SessionsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get uuid => $composableBuilder(
+    column: $table.uuid,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get firstDay => $composableBuilder(
     column: $table.firstDay,
     builder: (column) => ColumnOrderings(column),
@@ -1828,8 +2320,18 @@ class $$SessionsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
+  ColumnOrderings<int> get updatedMs => $composableBuilder(
+    column: $table.updatedMs,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get deleted => $composableBuilder(
+    column: $table.deleted,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get dirty => $composableBuilder(
+    column: $table.dirty,
     builder: (column) => ColumnOrderings(column),
   );
 }
@@ -1846,14 +2348,23 @@ class $$SessionsTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
+  GeneratedColumn<String> get uuid =>
+      $composableBuilder(column: $table.uuid, builder: (column) => column);
+
   GeneratedColumn<DateTime> get firstDay =>
       $composableBuilder(column: $table.firstDay, builder: (column) => column);
 
   GeneratedColumn<String> get data =>
       $composableBuilder(column: $table.data, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get updatedAt =>
-      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+  GeneratedColumn<int> get updatedMs =>
+      $composableBuilder(column: $table.updatedMs, builder: (column) => column);
+
+  GeneratedColumn<bool> get deleted =>
+      $composableBuilder(column: $table.deleted, builder: (column) => column);
+
+  GeneratedColumn<bool> get dirty =>
+      $composableBuilder(column: $table.dirty, builder: (column) => column);
 }
 
 class $$SessionsTableTableManager
@@ -1888,26 +2399,38 @@ class $$SessionsTableTableManager
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
+                Value<String> uuid = const Value.absent(),
                 Value<DateTime> firstDay = const Value.absent(),
                 Value<String> data = const Value.absent(),
-                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> updatedMs = const Value.absent(),
+                Value<bool> deleted = const Value.absent(),
+                Value<bool> dirty = const Value.absent(),
               }) => SessionsCompanion(
                 id: id,
+                uuid: uuid,
                 firstDay: firstDay,
                 data: data,
-                updatedAt: updatedAt,
+                updatedMs: updatedMs,
+                deleted: deleted,
+                dirty: dirty,
               ),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
+                required String uuid,
                 required DateTime firstDay,
                 required String data,
-                required DateTime updatedAt,
+                required int updatedMs,
+                Value<bool> deleted = const Value.absent(),
+                Value<bool> dirty = const Value.absent(),
               }) => SessionsCompanion.insert(
                 id: id,
+                uuid: uuid,
                 firstDay: firstDay,
                 data: data,
-                updatedAt: updatedAt,
+                updatedMs: updatedMs,
+                deleted: deleted,
+                dirty: dirty,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -1944,14 +2467,18 @@ typedef $$ShoppingChecksTableCreateCompanionBuilder =
     ShoppingChecksCompanion Function({
       required int sessionId,
       required String productId,
-      required DateTime checkedAt,
+      Value<bool> checked,
+      required int updatedMs,
+      Value<bool> dirty,
       Value<int> rowid,
     });
 typedef $$ShoppingChecksTableUpdateCompanionBuilder =
     ShoppingChecksCompanion Function({
       Value<int> sessionId,
       Value<String> productId,
-      Value<DateTime> checkedAt,
+      Value<bool> checked,
+      Value<int> updatedMs,
+      Value<bool> dirty,
       Value<int> rowid,
     });
 
@@ -1974,8 +2501,18 @@ class $$ShoppingChecksTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<DateTime> get checkedAt => $composableBuilder(
-    column: $table.checkedAt,
+  ColumnFilters<bool> get checked => $composableBuilder(
+    column: $table.checked,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get updatedMs => $composableBuilder(
+    column: $table.updatedMs,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get dirty => $composableBuilder(
+    column: $table.dirty,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -1999,8 +2536,18 @@ class $$ShoppingChecksTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<DateTime> get checkedAt => $composableBuilder(
-    column: $table.checkedAt,
+  ColumnOrderings<bool> get checked => $composableBuilder(
+    column: $table.checked,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedMs => $composableBuilder(
+    column: $table.updatedMs,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get dirty => $composableBuilder(
+    column: $table.dirty,
     builder: (column) => ColumnOrderings(column),
   );
 }
@@ -2020,8 +2567,14 @@ class $$ShoppingChecksTableAnnotationComposer
   GeneratedColumn<String> get productId =>
       $composableBuilder(column: $table.productId, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get checkedAt =>
-      $composableBuilder(column: $table.checkedAt, builder: (column) => column);
+  GeneratedColumn<bool> get checked =>
+      $composableBuilder(column: $table.checked, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedMs =>
+      $composableBuilder(column: $table.updatedMs, builder: (column) => column);
+
+  GeneratedColumn<bool> get dirty =>
+      $composableBuilder(column: $table.dirty, builder: (column) => column);
 }
 
 class $$ShoppingChecksTableTableManager
@@ -2063,24 +2616,32 @@ class $$ShoppingChecksTableTableManager
               ({
                 Value<int> sessionId = const Value.absent(),
                 Value<String> productId = const Value.absent(),
-                Value<DateTime> checkedAt = const Value.absent(),
+                Value<bool> checked = const Value.absent(),
+                Value<int> updatedMs = const Value.absent(),
+                Value<bool> dirty = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ShoppingChecksCompanion(
                 sessionId: sessionId,
                 productId: productId,
-                checkedAt: checkedAt,
+                checked: checked,
+                updatedMs: updatedMs,
+                dirty: dirty,
                 rowid: rowid,
               ),
           createCompanionCallback:
               ({
                 required int sessionId,
                 required String productId,
-                required DateTime checkedAt,
+                Value<bool> checked = const Value.absent(),
+                required int updatedMs,
+                Value<bool> dirty = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ShoppingChecksCompanion.insert(
                 sessionId: sessionId,
                 productId: productId,
-                checkedAt: checkedAt,
+                checked: checked,
+                updatedMs: updatedMs,
+                dirty: dirty,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -2117,6 +2678,143 @@ typedef $$ShoppingChecksTableProcessedTableManager =
       ShoppingCheckRow,
       PrefetchHooks Function()
     >;
+typedef $$SyncMetaTableCreateCompanionBuilder = SyncMetaCompanion Function({
+  required String key,
+  required String value,
+  Value<int> rowid,
+});
+typedef $$SyncMetaTableUpdateCompanionBuilder = SyncMetaCompanion Function({
+  Value<String> key,
+  Value<String> value,
+  Value<int> rowid,
+});
+
+class $$SyncMetaTableFilterComposer
+    extends Composer<_$AppDatabase, $SyncMetaTable> {
+  $$SyncMetaTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get key => $composableBuilder(
+    column: $table.key,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get value => $composableBuilder(
+    column: $table.value,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$SyncMetaTableOrderingComposer
+    extends Composer<_$AppDatabase, $SyncMetaTable> {
+  $$SyncMetaTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get key => $composableBuilder(
+    column: $table.key,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get value => $composableBuilder(
+    column: $table.value,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$SyncMetaTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SyncMetaTable> {
+  $$SyncMetaTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get key =>
+      $composableBuilder(column: $table.key, builder: (column) => column);
+
+  GeneratedColumn<String> get value =>
+      $composableBuilder(column: $table.value, builder: (column) => column);
+}
+
+class $$SyncMetaTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SyncMetaTable,
+          SyncMetaRow,
+          $$SyncMetaTableFilterComposer,
+          $$SyncMetaTableOrderingComposer,
+          $$SyncMetaTableAnnotationComposer,
+          $$SyncMetaTableCreateCompanionBuilder,
+          $$SyncMetaTableUpdateCompanionBuilder,
+          (
+            SyncMetaRow,
+            BaseReferences<_$AppDatabase, $SyncMetaTable, SyncMetaRow>,
+          ),
+          SyncMetaRow,
+          PrefetchHooks Function()
+        > {
+  $$SyncMetaTableTableManager(_$AppDatabase db, $SyncMetaTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SyncMetaTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SyncMetaTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SyncMetaTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> key = const Value.absent(),
+            Value<String> value = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) => SyncMetaCompanion(key: key, value: value, rowid: rowid),
+          createCompanionCallback: ({
+            required String key,
+            required String value,
+            Value<int> rowid = const Value.absent(),
+          }) => SyncMetaCompanion.insert(key: key, value: value, rowid: rowid),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$SyncMetaTable, SyncMetaRow>(table),
+                  BaseReferences<_$AppDatabase, $SyncMetaTable, SyncMetaRow>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$SyncMetaTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SyncMetaTable,
+      SyncMetaRow,
+      $$SyncMetaTableFilterComposer,
+      $$SyncMetaTableOrderingComposer,
+      $$SyncMetaTableAnnotationComposer,
+      $$SyncMetaTableCreateCompanionBuilder,
+      $$SyncMetaTableUpdateCompanionBuilder,
+      (SyncMetaRow, BaseReferences<_$AppDatabase, $SyncMetaTable, SyncMetaRow>),
+      SyncMetaRow,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -2129,4 +2827,6 @@ class $AppDatabaseManager {
       $$SessionsTableTableManager(_db, _db.sessions);
   $$ShoppingChecksTableTableManager get shoppingChecks =>
       $$ShoppingChecksTableTableManager(_db, _db.shoppingChecks);
+  $$SyncMetaTableTableManager get syncMeta =>
+      $$SyncMetaTableTableManager(_db, _db.syncMeta);
 }
